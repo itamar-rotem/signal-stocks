@@ -13,21 +13,14 @@ import {
 } from 'drizzle-orm/pg-core';
 import { stocks } from './stocks';
 import { signals } from './signals';
-import {
-  userPlanEnum,
-  watchlistSourceEnum,
-  alertChannelEnum,
-  alertTypeEnum,
-} from './enums';
+import { userPlanEnum, watchlistSourceEnum, alertChannelEnum, alertTypeEnum } from './enums';
 
 export const users = pgTable('users', {
   id: serial('id').primaryKey(),
   clerkUserId: varchar('clerk_user_id', { length: 64 }).notNull().unique(),
   plan: userPlanEnum('plan').notNull().default('free'),
   stripeCustomerId: varchar('stripe_customer_id', { length: 64 }),
-  createdAt: timestamp('created_at', { withTimezone: true })
-    .notNull()
-    .defaultNow(),
+  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
 });
 
 export const watchlists = pgTable(
@@ -41,9 +34,7 @@ export const watchlists = pgTable(
       .notNull()
       .references(() => stocks.id, { onDelete: 'cascade' }),
     source: watchlistSourceEnum('source').notNull().default('manual'),
-    addedAt: timestamp('added_at', { withTimezone: true })
-      .notNull()
-      .defaultNow(),
+    addedAt: timestamp('added_at', { withTimezone: true }).notNull().defaultNow(),
   },
   (table) => ({
     userIdx: index('watchlists_user_idx').on(table.userId),
@@ -66,9 +57,7 @@ export const watchlistAssessments = pgTable('watchlist_assessments', {
   risks: text('risks'),
   aiText: text('ai_text'),
   recommendation: text('recommendation'),
-  updatedAt: timestamp('updated_at', { withTimezone: true })
-    .notNull()
-    .defaultNow(),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
 });
 
 export const userTrades = pgTable(
@@ -91,9 +80,7 @@ export const userTrades = pgTable(
     exitDate: date('exit_date'),
     realizedPnl: numeric('realized_pnl', { precision: 14, scale: 4 }),
     notes: text('notes'),
-    createdAt: timestamp('created_at', { withTimezone: true })
-      .notNull()
-      .defaultNow(),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
   },
   (table) => ({
     userIdx: index('user_trades_user_idx').on(table.userId),

@@ -54,11 +54,7 @@ describe('db schema barrel', () => {
   });
 
   it('signalStrengthEnum matches spec values', () => {
-    expect(schema.signalStrengthEnum.enumValues).toEqual([
-      'medium',
-      'strong',
-      'very_strong',
-    ]);
+    expect(schema.signalStrengthEnum.enumValues).toEqual(['medium', 'strong', 'very_strong']);
   });
 
   it('signalOutcomeEnum matches spec values', () => {

@@ -12,11 +12,7 @@ export const signalTypeEnum = pgEnum('signal_type', [
   'SIG-07',
 ]);
 
-export const signalStrengthEnum = pgEnum('signal_strength', [
-  'medium',
-  'strong',
-  'very_strong',
-]);
+export const signalStrengthEnum = pgEnum('signal_strength', ['medium', 'strong', 'very_strong']);
 
 export const signalSourceEnum = pgEnum('signal_source', ['system', 'watchlist']);
 

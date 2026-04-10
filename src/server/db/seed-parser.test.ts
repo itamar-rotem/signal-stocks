@@ -95,8 +95,6 @@ describe('parseUniverse', () => {
     const universe = mod.default;
     const parsed = parseUniverse(universe);
     expect(parsed.length).toBeGreaterThanOrEqual(30);
-    expect(parsed.every((e) => ['NYSE', 'NASDAQ', 'AMEX'].includes(e.exchange))).toBe(
-      true,
-    );
+    expect(parsed.every((e) => ['NYSE', 'NASDAQ', 'AMEX'].includes(e.exchange))).toBe(true);
   });
 });

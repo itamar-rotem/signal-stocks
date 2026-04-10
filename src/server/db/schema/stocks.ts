@@ -28,9 +28,7 @@ export const stocks = pgTable(
     price: numeric('price', { precision: 12, scale: 4 }),
     listingDate: date('listing_date'),
     isEligible: boolean('is_eligible').notNull().default(false),
-    lastUpdated: timestamp('last_updated', { withTimezone: true })
-      .notNull()
-      .defaultNow(),
+    lastUpdated: timestamp('last_updated', { withTimezone: true }).notNull().defaultNow(),
   },
   (table) => ({
     tickerIdx: uniqueIndex('stocks_ticker_idx').on(table.ticker),
@@ -57,10 +55,7 @@ export const dailyPrices = pgTable(
     ma200Slope: numeric('ma200_slope', { precision: 12, scale: 6 }),
   },
   (table) => ({
-    stockDateIdx: uniqueIndex('daily_prices_stock_date_idx').on(
-      table.stockId,
-      table.date,
-    ),
+    stockDateIdx: uniqueIndex('daily_prices_stock_date_idx').on(table.stockId, table.date),
   }),
 );
 
@@ -90,14 +85,9 @@ export const fundamentals = pgTable(
     pegRatio: numeric('peg_ratio', { precision: 8, scale: 4 }),
     evEbitda: numeric('ev_ebitda', { precision: 10, scale: 4 }),
     fundamentalScore: numeric('fundamental_score', { precision: 5, scale: 2 }),
-    createdAt: timestamp('created_at', { withTimezone: true })
-      .notNull()
-      .defaultNow(),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
   },
   (table) => ({
-    stockQuarterIdx: uniqueIndex('fundamentals_stock_quarter_idx').on(
-      table.stockId,
-      table.quarter,
-    ),
+    stockQuarterIdx: uniqueIndex('fundamentals_stock_quarter_idx').on(table.stockId, table.quarter),
   }),
 );

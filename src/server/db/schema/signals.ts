@@ -53,12 +53,8 @@ export const signalRationales = pgTable('signal_rationales', {
   confidence: confidenceEnum('confidence'),
   strategyNote: text('strategy_note'),
   disclaimer: text('disclaimer').notNull(),
-  createdAt: timestamp('created_at', { withTimezone: true })
-    .notNull()
-    .defaultNow(),
-  updatedAt: timestamp('updated_at', { withTimezone: true })
-    .notNull()
-    .defaultNow(),
+  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
 });
 
 export const signalRecommendations = pgTable(
@@ -74,9 +70,7 @@ export const signalRecommendations = pgTable(
     stopLoss: numeric('stop_loss', { precision: 12, scale: 4 }),
     trailingStop: numeric('trailing_stop', { precision: 12, scale: 4 }),
     aiUpdateText: text('ai_update_text'),
-    transitionedAt: timestamp('transitioned_at', { withTimezone: true })
-      .notNull()
-      .defaultNow(),
+    transitionedAt: timestamp('transitioned_at', { withTimezone: true }).notNull().defaultNow(),
   },
   (table) => ({
     signalStateIdx: index('signal_recommendations_signal_state_idx').on(
@@ -96,9 +90,7 @@ export const signalStateLog = pgTable(
     fromState: recommendationStateEnum('from_state'),
     toState: recommendationStateEnum('to_state').notNull(),
     reason: text('reason').notNull(),
-    createdAt: timestamp('created_at', { withTimezone: true })
-      .notNull()
-      .defaultNow(),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
   },
   (table) => ({
     signalIdx: index('signal_state_log_signal_idx').on(table.signalId),
@@ -116,7 +108,5 @@ export const signalOutcomes = pgTable('signal_outcomes', {
   exitPrice: numeric('exit_price', { precision: 12, scale: 4 }).notNull(),
   actualReturnPct: numeric('actual_return_pct', { precision: 7, scale: 4 }).notNull(),
   daysHeld: integer('days_held').notNull(),
-  resolvedAt: timestamp('resolved_at', { withTimezone: true })
-    .notNull()
-    .defaultNow(),
+  resolvedAt: timestamp('resolved_at', { withTimezone: true }).notNull().defaultNow(),
 });
