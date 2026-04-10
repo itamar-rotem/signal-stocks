@@ -15,6 +15,7 @@ import {
   signalSourceEnum,
   recommendationStateEnum,
   signalOutcomeEnum,
+  confidenceEnum,
 } from './enums';
 
 export const signals = pgTable(
@@ -49,7 +50,7 @@ export const signalRationales = pgTable('signal_rationales', {
   targetPrice: numeric('target_price', { precision: 12, scale: 4 }),
   stopLoss: numeric('stop_loss', { precision: 12, scale: 4 }),
   riskReward: numeric('risk_reward', { precision: 6, scale: 2 }),
-  confidence: text('confidence'), // "Low" | "Medium" | "High"
+  confidence: confidenceEnum('confidence'),
   strategyNote: text('strategy_note'),
   disclaimer: text('disclaimer').notNull(),
   createdAt: timestamp('created_at', { withTimezone: true })

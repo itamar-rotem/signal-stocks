@@ -18,7 +18,7 @@ export const stocks = pgTable(
   'stocks',
   {
     id: serial('id').primaryKey(),
-    ticker: varchar('ticker', { length: 10 }).notNull().unique(),
+    ticker: varchar('ticker', { length: 10 }).notNull(),
     name: text('name').notNull(),
     exchange: exchangeEnum('exchange').notNull(),
     sector: text('sector'),

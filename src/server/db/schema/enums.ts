@@ -43,3 +43,14 @@ export const userPlanEnum = pgEnum('user_plan', ['free', 'pro', 'premium']);
 export const watchlistSourceEnum = pgEnum('watchlist_source', ['manual', 'signal']);
 
 export const alertChannelEnum = pgEnum('alert_channel', ['email']);
+
+export const alertTypeEnum = pgEnum('alert_type', [
+  'new_signal',
+  'state_change',
+  'watchlist_signal',
+  'target_stop_hit',
+  'daily_digest',
+  'earnings_warning',
+]);
+
+export const confidenceEnum = pgEnum('ai_confidence', ['Low', 'Medium', 'High']);

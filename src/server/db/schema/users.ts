@@ -17,6 +17,7 @@ import {
   userPlanEnum,
   watchlistSourceEnum,
   alertChannelEnum,
+  alertTypeEnum,
 } from './enums';
 
 export const users = pgTable('users', {
@@ -104,7 +105,7 @@ export const alertPreferences = pgTable('alert_preferences', {
   userId: integer('user_id')
     .notNull()
     .references(() => users.id, { onDelete: 'cascade' }),
-  alertType: text('alert_type').notNull(),
+  alertType: alertTypeEnum('alert_type').notNull(),
   channel: alertChannelEnum('channel').notNull().default('email'),
   enabled: boolean('enabled').notNull().default(true),
 });

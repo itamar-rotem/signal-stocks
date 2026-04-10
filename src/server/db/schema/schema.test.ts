@@ -77,4 +77,19 @@ describe('db schema barrel', () => {
   it('exchangeEnum covers US listings', () => {
     expect(schema.exchangeEnum.enumValues).toEqual(['NYSE', 'NASDAQ', 'AMEX']);
   });
+
+  it('alertTypeEnum covers all spec-defined alert types', () => {
+    expect(schema.alertTypeEnum.enumValues).toEqual([
+      'new_signal',
+      'state_change',
+      'watchlist_signal',
+      'target_stop_hit',
+      'daily_digest',
+      'earnings_warning',
+    ]);
+  });
+
+  it('confidenceEnum covers Low/Medium/High', () => {
+    expect(schema.confidenceEnum.enumValues).toEqual(['Low', 'Medium', 'High']);
+  });
 });
