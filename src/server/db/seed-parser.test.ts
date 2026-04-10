@@ -89,4 +89,14 @@ describe('parseUniverse', () => {
     const input = [{ ticker: 'AAPL' }];
     expect(() => parseUniverse(input)).toThrow();
   });
+
+  it('loads the committed starter universe successfully', async () => {
+    const mod = await import('./seed-data/universe.json');
+    const universe = mod.default;
+    const parsed = parseUniverse(universe);
+    expect(parsed.length).toBeGreaterThanOrEqual(30);
+    expect(parsed.every((e) => ['NYSE', 'NASDAQ', 'AMEX'].includes(e.exchange))).toBe(
+      true,
+    );
+  });
 });
