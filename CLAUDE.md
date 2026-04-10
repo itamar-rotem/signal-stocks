@@ -30,7 +30,12 @@ src/
     sign-up/
     api/            API routes + tRPC handler (later)
   server/
-    db/             Drizzle schema, client
+    db/
+      schema/       Drizzle tables split by domain (stocks, signals, users, simulation)
+      seed-data/    Static seed JSON (starter universe)
+      seed.ts       Executable seed script (pnpm db:seed)
+      seed-parser.ts, seed-parser.test.ts
+      index.ts      Drizzle client
     trpc/           tRPC routers (later)
     services/       Business logic (signals, scoring, AI, alerts) (later)
     inngest/        Pipeline step functions (later)
@@ -79,6 +84,7 @@ pnpm format           # Prettier (write)
 pnpm format:check     # Prettier (check)
 pnpm db:push          # apply Drizzle schema to Neon (Phase 2+)
 pnpm db:studio        # open Drizzle Studio (Phase 2+)
+pnpm db:seed          # load starter universe (after db:push)
 ```
 
 ## Design Spec and Plans
