@@ -78,6 +78,7 @@ Each file has one clear responsibility. Business logic tables come in Phase 2.
 ## Task 1: Initialize Next.js Project
 
 **Files:**
+
 - Create: `signal-stocks/package.json`
 - Create: `signal-stocks/tsconfig.json`
 - Create: `signal-stocks/next.config.mjs`
@@ -121,7 +122,7 @@ export default function HomePage() {
   return (
     <main className="flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center p-8">
       <h1 className="text-4xl font-bold tracking-tight">SignalStocks</h1>
-      <p className="mt-4 max-w-xl text-center text-muted-foreground">
+      <p className="text-muted-foreground mt-4 max-w-xl text-center">
         AI-Powered Stock Screener & Active Investing Companion.
       </p>
     </main>
@@ -149,6 +150,7 @@ git commit -m "Initialize Next.js project with TypeScript and Tailwind"
 ## Task 2: Install and Configure Prettier
 
 **Files:**
+
 - Create: `.prettierrc`
 - Create: `.prettierignore`
 - Modify: `package.json` (add format scripts)
@@ -212,6 +214,7 @@ git commit -m "Add Prettier with Tailwind plugin"
 ## Task 3: Install and Configure shadcn/ui
 
 **Files:**
+
 - Create: `components.json`
 - Create: `src/lib/utils.ts`
 - Create: `src/components/ui/button.tsx` (via shadcn add)
@@ -224,6 +227,7 @@ pnpm dlx shadcn@latest init
 ```
 
 Answer the prompts:
+
 - Style: **New York**
 - Base color: **Slate**
 - CSS variables: **Yes**
@@ -265,6 +269,7 @@ git commit -m "Add shadcn/ui with Button and Card primitives"
 ## Task 4: Add Environment Variable Validation
 
 **Files:**
+
 - Create: `.env.example`
 - Create: `src/lib/env.ts`
 
@@ -344,6 +349,7 @@ git commit -m "Add typed environment variable validation"
 ## Task 5: Install and Configure Clerk
 
 **Files:**
+
 - Modify: `package.json`
 - Create: `middleware.ts`
 - Modify: `src/app/layout.tsx`
@@ -395,7 +401,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
-        <body className="min-h-screen bg-background font-sans antialiased">{children}</body>
+        <body className="bg-background min-h-screen font-sans antialiased">{children}</body>
       </html>
     </ClerkProvider>
   );
@@ -454,6 +460,7 @@ git commit -m "Add Clerk authentication with sign-in/up routes and middleware"
 ## Task 6: Install Drizzle ORM and Neon Client
 
 **Files:**
+
 - Modify: `package.json`
 - Create: `drizzle.config.ts`
 - Create: `src/server/db/index.ts`
@@ -534,6 +541,7 @@ git commit -m "Add Drizzle ORM with Neon serverless client"
 ## Task 7: Build the Disclaimer Footer Component
 
 **Files:**
+
 - Create: `src/components/layout/disclaimer-footer.tsx`
 - Create: `src/components/layout/disclaimer-footer.test.tsx`
 
@@ -592,9 +600,7 @@ import { DisclaimerFooter } from './disclaimer-footer';
 describe('DisclaimerFooter', () => {
   it('renders the legal disclaimer text', () => {
     render(<DisclaimerFooter />);
-    expect(
-      screen.getByText(/educational information only/i),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/educational information only/i)).toBeInTheDocument();
     expect(screen.getByText(/not financial advice/i)).toBeInTheDocument();
   });
 
@@ -622,11 +628,10 @@ export function DisclaimerFooter() {
   return (
     <footer
       role="contentinfo"
-      className="border-t bg-muted/50 px-4 py-3 text-center text-xs text-muted-foreground"
+      className="bg-muted/50 text-muted-foreground border-t px-4 py-3 text-center text-xs"
     >
-      SignalStocks provides educational information only. Not financial advice. Not a
-      recommendation to buy or sell securities. Past performance does not guarantee future
-      results.
+      SignalStocks provides educational information only. Not financial advice. Not a recommendation
+      to buy or sell securities. Past performance does not guarantee future results.
     </footer>
   );
 }
@@ -652,6 +657,7 @@ git commit -m "Add non-dismissible legal disclaimer footer with tests"
 ## Task 8: Build the Header with Clerk UserButton
 
 **Files:**
+
 - Create: `src/components/layout/header.tsx`
 
 - [ ] **Step 1: Create the header component**
@@ -704,6 +710,7 @@ git commit -m "Add Header component with Clerk UserButton"
 ## Task 9: Wire Header and Footer into Root Layout
 
 **Files:**
+
 - Modify: `src/app/layout.tsx`
 
 - [ ] **Step 1: Update root layout to include Header and DisclaimerFooter**
@@ -726,7 +733,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
-        <body className="flex min-h-screen flex-col bg-background font-sans antialiased">
+        <body className="bg-background flex min-h-screen flex-col font-sans antialiased">
           <Header />
           <div className="flex-1">{children}</div>
           <DisclaimerFooter />
@@ -744,6 +751,7 @@ pnpm dev
 ```
 
 Visit http://localhost:3000. You should see:
+
 - Header at top with "SignalStocks" brand link and Sign in/Sign up buttons
 - Landing page content in the middle
 - Legal disclaimer footer at the bottom
@@ -762,6 +770,7 @@ git commit -m "Wire Header and DisclaimerFooter into root layout"
 ## Task 10: Build the Protected Dashboard Shell
 
 **Files:**
+
 - Create: `src/app/(auth)/dashboard/page.tsx`
 - Create: `src/components/layout/site-nav.tsx`
 
@@ -797,7 +806,7 @@ export function SiteNav() {
                 'border-b-2 px-1 py-3 text-sm font-medium transition-colors',
                 active
                   ? 'border-primary text-foreground'
-                  : 'border-transparent text-muted-foreground hover:text-foreground',
+                  : 'text-muted-foreground hover:text-foreground border-transparent',
               )}
             >
               {tab.label}
@@ -828,7 +837,7 @@ export default function DashboardPage() {
             <CardTitle>Today&rsquo;s Signals</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-muted-foreground text-sm">
               No signals yet. The signal engine will populate this view in a later phase.
             </p>
           </CardContent>
@@ -859,6 +868,7 @@ git commit -m "Add protected dashboard shell with nav tabs"
 ## Task 11: Enhance the Landing Page Hero
 
 **Files:**
+
 - Create: `src/components/landing/hero.tsx`
 - Modify: `src/app/page.tsx`
 
@@ -873,13 +883,10 @@ import { Button } from '@/components/ui/button';
 export function Hero() {
   return (
     <section className="mx-auto max-w-4xl px-4 py-24 text-center">
-      <h1 className="text-5xl font-bold tracking-tight sm:text-6xl">
-        Your AI investing co-pilot
-      </h1>
-      <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground">
-        SignalStocks scans the market every day, surfaces high-probability trade ideas, and
-        tells you when to enter, hold, and exit &mdash; with AI-generated rationale for every
-        move.
+      <h1 className="text-5xl font-bold tracking-tight sm:text-6xl">Your AI investing co-pilot</h1>
+      <p className="text-muted-foreground mx-auto mt-6 max-w-2xl text-lg">
+        SignalStocks scans the market every day, surfaces high-probability trade ideas, and tells
+        you when to enter, hold, and exit &mdash; with AI-generated rationale for every move.
       </p>
       <div className="mt-10 flex items-center justify-center gap-4">
         <Button asChild size="lg">
@@ -930,6 +937,7 @@ git commit -m "Add landing hero section"
 ## Task 12: Create CLAUDE.md for Project Context
 
 **Files:**
+
 - Create: `CLAUDE.md`
 
 - [ ] **Step 1: Create `CLAUDE.md` at the project root**
@@ -954,20 +962,21 @@ AI-Powered Stock Screener & Active Investing Companion.
 - Vercel for hosting
 
 ## Project Structure
+```
 
-```
 src/
-  app/              Next.js App Router (pages, layouts)
-    (auth)/         Clerk-protected routes
-    api/            API routes + tRPC handler
-  server/
-    db/             Drizzle schema, client
-    trpc/           tRPC routers (later)
-    services/       Business logic (signals, scoring, AI, alerts)
-    inngest/        Pipeline step functions
-  components/       React components (UI, charts, cards)
-  lib/              Shared utilities, constants, env validation
-```
+app/ Next.js App Router (pages, layouts)
+(auth)/ Clerk-protected routes
+api/ API routes + tRPC handler
+server/
+db/ Drizzle schema, client
+trpc/ tRPC routers (later)
+services/ Business logic (signals, scoring, AI, alerts)
+inngest/ Pipeline step functions
+components/ React components (UI, charts, cards)
+lib/ Shared utilities, constants, env validation
+
+````
 
 ## Design Spec
 
@@ -996,7 +1005,7 @@ pnpm test:run         # run Vitest once
 pnpm build            # production build
 pnpm db:push          # apply Drizzle schema to Neon
 pnpm db:studio        # open Drizzle Studio
-```
+````
 
 ## Notes for Claude Code
 
@@ -1004,20 +1013,22 @@ pnpm db:studio        # open Drizzle Studio
 - Email alerts only initially (push/SMS/Telegram are post-launch)
 - Real FMP data from day one — no mock data
 - Legal disclaimers and non-advisory framing are hard requirements
-```
+
+````
 
 - [ ] **Step 2: Commit**
 
 ```bash
 git add CLAUDE.md
 git commit -m "Add CLAUDE.md for project context"
-```
+````
 
 ---
 
 ## Task 13: Add CI-Friendly Scripts and Verify Clean Build
 
 **Files:**
+
 - Modify: `package.json`
 
 - [ ] **Step 1: Verify the full build passes**
