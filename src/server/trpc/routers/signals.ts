@@ -1,8 +1,12 @@
 import { z } from 'zod';
 import { desc, eq, isNull, notInArray, or } from 'drizzle-orm';
 import { db } from '@/server/db';
-import { signals, signalRecommendations, signalRationales, stocks } from '@/server/db/schema';
+import { signals, signalRecommendations, signalRationales, stocks, dailyPrices } from '@/server/db/schema';
 import { router, publicProcedure } from '../trpc';
+import {
+  transformPriceHistoryRows,
+  buildChartMarkersFromSignals,
+} from '@/components/charts/chart-data';
 
 export interface SignalJoinRow {
   signalId: number;
@@ -171,6 +175,74 @@ export const signalsRouter = router({
       return {
         stock: vms[0].stock,
         signals: vms,
+      };
+    }),
+
+  priceHistory: publicProcedure
+    .input(
+      z.object({
+        ticker: z.string().min(1).max(10),
+        days: z.number().int().min(30).max(750).default(260),
+      }),
+    )
+    .query(async ({ input }) => {
+      const ticker = input.ticker.toUpperCase();
+      const [stock] = await db
+        .select({ id: stocks.id, ticker: stocks.ticker })
+        .from(stocks)
+        .where(eq(stocks.ticker, ticker))
+        .limit(1);
+      if (!stock) return null;
+
+      const rows = await db
+        .select({
+          date: dailyPrices.date,
+          open: dailyPrices.open,
+          high: dailyPrices.high,
+          low: dailyPrices.low,
+          close: dailyPrices.close,
+          volume: dailyPrices.volume,
+          ma200: dailyPrices.ma200,
+        })
+        .from(dailyPrices)
+        .where(eq(dailyPrices.stockId, stock.id))
+        .orderBy(desc(dailyPrices.date))
+        .limit(input.days);
+
+      // Re-sort ascending for chart consumption.
+      const chartData = transformPriceHistoryRows(
+        rows.map((r) => ({
+          date: r.date,
+          open: r.open,
+          high: r.high,
+          low: r.low,
+          close: r.close,
+          volume: r.volume,
+          ma200: r.ma200,
+        })),
+      );
+
+      const sigRows = await db
+        .select({
+          signalType: signals.signalType,
+          triggeredAt: signals.triggeredAt,
+          strength: signals.strength,
+        })
+        .from(signals)
+        .where(eq(signals.stockId, stock.id))
+        .orderBy(desc(signals.triggeredAt));
+
+      return {
+        ticker,
+        bars: chartData.bars,
+        ma200Series: chartData.ma200Series,
+        markers: buildChartMarkersFromSignals(
+          sigRows.map((s) => ({
+            signalType: s.signalType,
+            triggeredAt: s.triggeredAt,
+            strength: s.strength,
+          })),
+        ),
       };
     }),
 });
