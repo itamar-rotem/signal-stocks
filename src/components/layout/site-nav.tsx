@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 
 const TABS = [
-  { href: '/dashboard', label: 'Signals' },
+  { href: '/dashboard/signals', label: 'Signals' },
   { href: '/dashboard/watchlist', label: 'Watchlist' },
   { href: '/dashboard/trades', label: 'Trades' },
 ] as const;
