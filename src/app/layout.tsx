@@ -5,8 +5,8 @@ import { DisclaimerFooter } from '@/components/layout/disclaimer-footer';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'SignalStocks',
-  description: 'AI-Powered Stock Screener & Active Investing Companion',
+  title: 'Lodestar — AI investing co-pilot',
+  description: 'Daily AI-scanned trade ideas with entry, exit, and rationale for every move.',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

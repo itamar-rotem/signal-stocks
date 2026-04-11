@@ -1,6 +1,6 @@
 @AGENTS.md
 
-# SignalStocks
+# Lodestar
 
 AI-Powered Stock Screener & Active Investing Companion.
 
@@ -12,7 +12,7 @@ AI-Powered Stock Screener & Active Investing Companion.
 - **tRPC v11** (Phase 9a — server router, RSC caller, client provider, fetch handler)
 - **Neon PostgreSQL** + **Drizzle ORM** (`@neondatabase/serverless`)
 - **Clerk v7** authentication
-- **Lightweight Charts** (TradingView OSS) for financial charts (later phase)
+- **Lightweight Charts v5** (TradingView OSS) for financial charts (Phase 9b)
 - **Anthropic Claude API** (`@anthropic-ai/sdk`) — Claude Sonnet for AI rationale generation (`AnthropicRationaleClient` in `services/ai/`)
 - **Financial Modeling Prep (FMP)** for market data (later phase)
 - **Inngest** for the daily pipeline (later phase)
@@ -30,6 +30,9 @@ src/
         watchlist/    Phase 10 — placeholder
         trades/       Phase 11 — placeholder
       stock/[ticker]/ Phase 9a — signal detail + rationale
+    demo/           Phase 9b — public sandbox with synthetic fixture data
+      signals/
+      stock/[ticker]/
     sign-in/
     sign-up/
     api/            API routes + tRPC fetch handler

@@ -1,4 +1,4 @@
-# SignalStocks
+# Lodestar
 
 AI-Powered Stock Screener & Active Investing Companion.
 

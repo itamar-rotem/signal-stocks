@@ -128,3 +128,52 @@
     @apply font-sans;
   }
 }
+
+@keyframes logo-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.4) rotate(-30deg);
+  }
+  70% {
+    opacity: 1;
+    transform: scale(1.08) rotate(5deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+@keyframes fade-up {
+  0% {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes ambient-drift {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(-8%, 4%) scale(1.05);
+  }
+}
+
+.animate-logo-in {
+  animation: logo-in 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.animate-fade-up {
+  opacity: 0;
+  animation: fade-up 0.7s ease-out forwards;
+}
+
+.animate-ambient {
+  animation: ambient-drift 22s ease-in-out infinite;
+}
