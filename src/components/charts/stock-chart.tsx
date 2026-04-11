@@ -28,12 +28,12 @@ export function StockChart({ bars, ma200Series, markers, height = 360 }: StockCh
     const chart = createChart(containerRef.current, {
       height,
       layout: {
-        background: { type: ColorType.Solid, color: 'transparent' },
-        textColor: 'rgb(120,120,130)',
+        background: { type: ColorType.Solid, color: '#1e2230' },
+        textColor: '#94a3b8',
       },
       grid: {
-        horzLines: { color: 'rgba(120,120,130,0.15)' },
-        vertLines: { color: 'rgba(120,120,130,0.07)' },
+        horzLines: { color: 'rgba(148, 163, 184, 0.08)' },
+        vertLines: { color: 'rgba(148, 163, 184, 0.05)' },
       },
       rightPriceScale: { borderVisible: false },
       timeScale: { borderVisible: false, rightOffset: 6 },
@@ -43,11 +43,11 @@ export function StockChart({ bars, ma200Series, markers, height = 360 }: StockCh
     chartRef.current = chart;
 
     const candleSeries = chart.addSeries(CandlestickSeries, {
-      upColor: '#16a34a',
-      downColor: '#dc2626',
+      upColor: '#10b981',
+      downColor: '#ef4444',
       borderVisible: false,
-      wickUpColor: '#16a34a',
-      wickDownColor: '#dc2626',
+      wickUpColor: '#10b981',
+      wickDownColor: '#ef4444',
     });
     candleSeries.setData(
       bars.map((b) => ({
@@ -61,7 +61,7 @@ export function StockChart({ bars, ma200Series, markers, height = 360 }: StockCh
 
     if (ma200Series.length > 0) {
       const lineSeries = chart.addSeries(LineSeries, {
-        color: '#3b82f6',
+        color: '#22d3ee',
         lineWidth: 2,
         priceLineVisible: false,
         lastValueVisible: false,
@@ -70,7 +70,6 @@ export function StockChart({ bars, ma200Series, markers, height = 360 }: StockCh
     }
 
     if (markers.length > 0) {
-      // lightweight-charts v5: markers are managed via createSeriesMarkers helper
       createSeriesMarkers(
         candleSeries,
         markers.map((m) => ({

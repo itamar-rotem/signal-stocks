@@ -1,5 +1,4 @@
 import { notFound } from 'next/navigation';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { RecommendationStateBadge } from '@/components/signals/recommendation-state-badge';
 import { RationaleCard } from '@/components/signals/rationale-card';
@@ -10,14 +9,14 @@ import {
   buildChartMarkersFromSignals,
 } from '@/components/charts/chart-data';
 import { DEMO_STOCKS } from '@/lib/demo/fixtures';
+import { Panel } from '@/components/ops/panel';
+import { MetricTile } from '@/components/ops/metric-tile';
+import { StatusPill } from '@/components/ops/status-pill';
+import { SeverityDot } from '@/components/ops/severity-dot';
+import { fmtUsd } from '@/lib/format';
 
 interface PageProps {
   params: Promise<{ ticker: string }>;
-}
-
-function fmtPrice(n: number | null): string {
-  if (n === null) return '—';
-  return `$${n.toFixed(2)}`;
 }
 
 export default async function DemoStockDetailPage({ params }: PageProps) {
@@ -35,65 +34,92 @@ export default async function DemoStockDetailPage({ params }: PageProps) {
     })),
   );
 
+  const latestSignal = detail.signals[0];
+  const state = latestSignal?.recommendation?.state ?? 'HOLD';
+  const validState = ['BUY', 'HOLD', 'WATCH', 'SELL', 'STOP_HIT', 'EXPIRED'].includes(state)
+    ? (state as 'BUY' | 'HOLD' | 'WATCH' | 'SELL' | 'STOP_HIT' | 'EXPIRED')
+    : 'HOLD';
+
+  const targetPrice = latestSignal?.recommendation?.targetPrice ?? detail.stock.lastPrice * 1.18;
+  const stopLoss = latestSignal?.recommendation?.stopLoss ?? detail.stock.lastPrice * 0.92;
+
   return (
-    <div className="space-y-6">
-      <header>
-        <div className="flex items-baseline gap-3">
-          <h1 className="text-3xl font-semibold">{detail.stock.ticker}</h1>
-          <p className="text-muted-foreground">{detail.stock.name}</p>
+    <section className="space-y-6">
+      {/* Breadcrumb */}
+      <div className="font-mono text-xs tracking-widest text-muted-foreground">
+        LODESTAR &#9656; SIGNAL OPS &#9656; DEMO &#9656; {upper}
+      </div>
+
+      {/* Header: ticker + KPI strip */}
+      <div className="flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <div className="flex items-center gap-3">
+            <h1 className="font-mono text-4xl font-bold tracking-tight">{upper}</h1>
+            <StatusPill status={validState} />
+            <SeverityDot severity="medium" pulse />
+          </div>
+          <p className="mt-1 text-muted-foreground">
+            {detail.stock.name}
+            {detail.stock.sector && (
+              <span className="text-muted-foreground/60"> · {detail.stock.sector}</span>
+            )}
+          </p>
         </div>
-        {detail.stock.sector && (
-          <p className="text-muted-foreground mt-1 text-sm">{detail.stock.sector}</p>
-        )}
-      </header>
+        <div className="flex gap-3">
+          <MetricTile small label="LAST" value={fmtUsd(detail.stock.lastPrice)} />
+          <MetricTile small label="TARGET" value={fmtUsd(targetPrice)} tone="buy" />
+          <MetricTile small label="STOP" value={fmtUsd(stopLoss)} tone="sell" />
+        </div>
+      </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Price History</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <StockChart bars={bars} ma200Series={ma200Series} markers={markers} />
-        </CardContent>
-      </Card>
+      {/* Chart panel */}
+      <Panel
+        title="PRICE · MA200 · SIGNAL MARKERS"
+        hint={`${bars.length} DAYS`}
+      >
+        <StockChart bars={bars} ma200Series={ma200Series} markers={markers} height={420} />
+      </Panel>
 
-      <RationaleCard
-        summary={detail.rationale.summary}
-        fundamentalThesis={detail.rationale.fundamentalThesis}
-        technicalContext={detail.rationale.technicalContext}
-        strategyNote={detail.rationale.strategyNote}
-        confidence={detail.rationale.confidence}
-        disclaimer={detail.rationale.disclaimer}
-      />
+      {/* Two-column: rationale + signal history */}
+      <div className="grid gap-4 lg:grid-cols-2">
+        <Panel title="AI RATIONALE">
+          <div className="px-4 py-4">
+            <RationaleCard
+              summary={detail.rationale.summary}
+              fundamentalThesis={detail.rationale.fundamentalThesis}
+              technicalContext={detail.rationale.technicalContext}
+              strategyNote={detail.rationale.strategyNote}
+              confidence={detail.rationale.confidence}
+              disclaimer={detail.rationale.disclaimer}
+            />
+          </div>
+        </Panel>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Signal History</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ul className="divide-y">
+        <Panel title="SIGNAL HISTORY">
+          <ul className="divide-y divide-border">
             {detail.signals.map((s) => (
               <li
                 key={s.signalId}
-                className="flex flex-wrap items-center justify-between gap-3 py-3"
+                className="flex flex-wrap items-center justify-between gap-3 px-4 py-3"
               >
                 <div className="flex items-center gap-2">
                   <Badge variant="outline">{signalTypeLabel(s.signalType)}</Badge>
                   <Badge variant="secondary">{s.strength.replace('_', ' ')}</Badge>
                   {s.volumeConfirmed && <Badge variant="info">Volume ✓</Badge>}
                 </div>
-                <div className="text-muted-foreground text-xs">
+                <div className="font-mono text-xs text-muted-foreground">
                   {s.triggeredAt.toISOString().slice(0, 10)}
                 </div>
-                <div className="flex items-center gap-3 text-sm">
-                  <span>Target {fmtPrice(s.recommendation?.targetPrice ?? null)}</span>
-                  <span>Stop {fmtPrice(s.recommendation?.stopLoss ?? null)}</span>
+                <div className="flex items-center gap-3 font-mono text-sm tabular-nums">
+                  <span>Target {fmtUsd(s.recommendation?.targetPrice ?? targetPrice)}</span>
+                  <span>Stop {fmtUsd(s.recommendation?.stopLoss ?? stopLoss)}</span>
                   <RecommendationStateBadge state={s.recommendation?.state ?? null} />
                 </div>
               </li>
             ))}
           </ul>
-        </CardContent>
-      </Card>
-    </div>
+        </Panel>
+      </div>
+    </section>
   );
 }
