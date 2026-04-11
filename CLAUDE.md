@@ -9,7 +9,7 @@ AI-Powered Stock Screener & Active Investing Companion.
 - **Next.js 16.2.3** (App Router) + TypeScript 5 + React 19
 - **Tailwind CSS v4** (no `tailwind.config.js` — uses `@theme` in `globals.css`)
 - **shadcn/ui** via the `base-nova` preset (Tailwind v4 compatible, Base UI primitives instead of Radix)
-- **tRPC v11** (added in a later phase)
+- **tRPC v11** (Phase 9a — server router, RSC caller, client provider, fetch handler)
 - **Neon PostgreSQL** + **Drizzle ORM** (`@neondatabase/serverless`)
 - **Clerk v7** authentication
 - **Lightweight Charts** (TradingView OSS) for financial charts (later phase)
@@ -26,9 +26,13 @@ src/
   app/              Next.js App Router (pages, layouts)
     (auth)/         Clerk-protected routes
       dashboard/
+        signals/      Phase 9a — signal list page
+        watchlist/    Phase 10 — placeholder
+        trades/       Phase 11 — placeholder
+      stock/[ticker]/ Phase 9a — signal detail + rationale
     sign-in/
     sign-up/
-    api/            API routes + tRPC handler (later)
+    api/            API routes + tRPC fetch handler
   server/
     db/
       schema/       Drizzle tables split by domain (stocks, signals, users, simulation)
@@ -36,7 +40,7 @@ src/
       seed.ts       Executable seed script (pnpm db:seed)
       seed-parser.ts, seed-parser.test.ts
       index.ts      Drizzle client
-    trpc/           tRPC routers (later)
+    trpc/           tRPC v11 routers (signals.list, signals.byTicker)
     services/
       market-data/  FMP client, MA computation, EOD ingestion, cli.ts
       fundamentals/ FMP ratios+metrics+income client, scoring, ingestion
@@ -80,6 +84,13 @@ middleware.ts       Clerk auth middleware (at project root, NOT in src/)
 ### Tailwind v4
 
 - No `tailwind.config.js`. Theme is defined via `@theme` blocks in `src/app/globals.css`. shadcn CSS variables live in the same file.
+
+### tRPC v11 + Next.js 16 App Router
+
+- Server router lives in `src/server/trpc/`. Client provider is `src/trpc/client.tsx`. RSC caller is `src/trpc/server.ts`. Fetch handler is `src/app/api/trpc/[trpc]/route.ts`.
+- Queries use `superjson` transformer on both client and server.
+- `serverTrpc()` from `@/trpc/server` returns an `appRouter.createCaller(ctx)` cached per request.
+- Router test files that import modules transitively touching `@/lib/env` must declare `// @vitest-environment node` on line 1 — otherwise jsdom triggers `@t3-oss/env-nextjs` client-side checks.
 
 ## Running Locally
 
