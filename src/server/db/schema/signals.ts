@@ -7,6 +7,7 @@ import {
   boolean,
   text,
   index,
+  uniqueIndex,
 } from 'drizzle-orm/pg-core';
 import { stocks } from './stocks';
 import {
@@ -36,6 +37,11 @@ export const signals = pgTable(
   (table) => ({
     stockIdx: index('signals_stock_idx').on(table.stockId),
     triggeredIdx: index('signals_triggered_idx').on(table.triggeredAt),
+    signalUniqueIdx: uniqueIndex('signals_stock_type_triggered_idx').on(
+      table.stockId,
+      table.signalType,
+      table.triggeredAt,
+    ),
   }),
 );
 

@@ -1,0 +1,1 @@
+CREATE UNIQUE INDEX "signals_stock_type_triggered_idx" ON "signals" USING btree ("stock_id","signal_type","triggered_at");
