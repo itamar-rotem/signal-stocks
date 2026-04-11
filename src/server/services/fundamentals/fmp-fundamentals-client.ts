@@ -38,10 +38,7 @@ export class FmpFundamentalsClient implements FundamentalsProvider {
       );
     }
     if (!response.ok) {
-      throw new FmpApiError(
-        `FMP returned ${response.status} for ${ticker}`,
-        response.status,
-      );
+      throw new FmpApiError(`FMP returned ${response.status} for ${ticker}`, response.status);
     }
     return response.json();
   }

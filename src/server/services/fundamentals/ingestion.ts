@@ -1,10 +1,7 @@
 import { inArray, sql } from 'drizzle-orm';
 import { db } from '@/server/db';
 import { stocks, fundamentals } from '@/server/db/schema';
-import {
-  FmpFundamentalsClient,
-  type FundamentalsProvider,
-} from './fmp-fundamentals-client';
+import { FmpFundamentalsClient, type FundamentalsProvider } from './fmp-fundamentals-client';
 import { deriveQuarter } from './fundamentals-schemas';
 import {
   scoreProfitability,
@@ -149,9 +146,7 @@ export async function ingestFundamentalsForTickers(
           : null;
 
       const epsGrowth =
-        latestIncome.eps != null &&
-        yearAgoIncome?.eps != null &&
-        yearAgoIncome.eps !== 0
+        latestIncome.eps != null && yearAgoIncome?.eps != null && yearAgoIncome.eps !== 0
           ? (latestIncome.eps - yearAgoIncome.eps) / Math.abs(yearAgoIncome.eps)
           : null;
 
@@ -204,8 +199,7 @@ export async function ingestFundamentalsForTickers(
   // Pass 3: score + upsert
   for (const raw of raws) {
     const sectorPeers = bySector.get(raw.sector ?? '__unknown__') ?? [];
-    const peerMetrics =
-      sectorPeers.length > 1 ? buildPeerMetrics(sectorPeers) : EMPTY_PEERS;
+    const peerMetrics = sectorPeers.length > 1 ? buildPeerMetrics(sectorPeers) : EMPTY_PEERS;
 
     const profitability = scoreProfitability(raw.metrics, peerMetrics);
     const growth = scoreGrowth(raw.metrics, peerMetrics);
@@ -213,8 +207,7 @@ export async function ingestFundamentalsForTickers(
     const valuation = scoreValuation(raw.metrics, peerMetrics);
     const composite = scoreComposite(profitability, growth, health, valuation);
 
-    const toStr = (n: number | null): string | null =>
-      n === null ? null : String(n);
+    const toStr = (n: number | null): string | null => (n === null ? null : String(n));
 
     try {
       await db
