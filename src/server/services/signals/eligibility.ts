@@ -16,17 +16,12 @@ function monthsBetween(fromIso: string, toIso: string): number {
  * `source === 'system'` uses PRD strict filters.
  * `source === 'watchlist'` uses the relaxed filters.
  */
-export function isEligible(
-  ctx: StockContext,
-  lastClose: number,
-  today: string,
-): boolean {
+export function isEligible(ctx: StockContext, lastClose: number, today: string): boolean {
   if (!ALLOWED_EXCHANGES.has(ctx.exchange)) return false;
 
   if (ctx.source === 'system') {
     if (ctx.marketCap === null || ctx.marketCap < 500_000_000) return false;
-    if (ctx.avgDailyVolume20 === null || ctx.avgDailyVolume20 < 500_000)
-      return false;
+    if (ctx.avgDailyVolume20 === null || ctx.avgDailyVolume20 < 500_000) return false;
     if (lastClose < 5) return false;
     if (ctx.fundamentalScore === null || ctx.fundamentalScore < 60) return false;
     if (ctx.listingDate === null) return false;

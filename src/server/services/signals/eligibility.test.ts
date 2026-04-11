@@ -22,15 +22,11 @@ describe('isEligible (system)', () => {
   });
 
   it('rejects market cap < $500M', () => {
-    expect(isEligible(systemCtx({ marketCap: 400_000_000 }), LAST_CLOSE, TODAY)).toBe(
-      false,
-    );
+    expect(isEligible(systemCtx({ marketCap: 400_000_000 }), LAST_CLOSE, TODAY)).toBe(false);
   });
 
   it('rejects avg volume < 500K', () => {
-    expect(isEligible(systemCtx({ avgDailyVolume20: 400_000 }), LAST_CLOSE, TODAY)).toBe(
-      false,
-    );
+    expect(isEligible(systemCtx({ avgDailyVolume20: 400_000 }), LAST_CLOSE, TODAY)).toBe(false);
   });
 
   it('rejects price < $5', () => {
@@ -38,15 +34,11 @@ describe('isEligible (system)', () => {
   });
 
   it('rejects listing age < 12 months', () => {
-    expect(
-      isEligible(systemCtx({ listingDate: '2025-11-01' }), LAST_CLOSE, TODAY),
-    ).toBe(false);
+    expect(isEligible(systemCtx({ listingDate: '2025-11-01' }), LAST_CLOSE, TODAY)).toBe(false);
   });
 
   it('rejects fundamental score < 60', () => {
-    expect(isEligible(systemCtx({ fundamentalScore: 55 }), LAST_CLOSE, TODAY)).toBe(
-      false,
-    );
+    expect(isEligible(systemCtx({ fundamentalScore: 55 }), LAST_CLOSE, TODAY)).toBe(false);
   });
 
   it('rejects unknown exchange', () => {
@@ -58,9 +50,7 @@ describe('isEligible (system)', () => {
   });
 
   it('rejects null fundamental score for system source', () => {
-    expect(
-      isEligible(systemCtx({ fundamentalScore: null }), LAST_CLOSE, TODAY),
-    ).toBe(false);
+    expect(isEligible(systemCtx({ fundamentalScore: null }), LAST_CLOSE, TODAY)).toBe(false);
   });
 });
 
@@ -69,13 +59,9 @@ describe('isEligible (watchlist)', () => {
     systemCtx({ source: 'watchlist', ...overrides });
 
   it('ignores market cap and fundamental score', () => {
-    expect(
-      isEligible(
-        watchCtx({ marketCap: 100_000_000, fundamentalScore: 10 }),
-        10,
-        TODAY,
-      ),
-    ).toBe(true);
+    expect(isEligible(watchCtx({ marketCap: 100_000_000, fundamentalScore: 10 }), 10, TODAY)).toBe(
+      true,
+    );
   });
 
   it('still enforces $2 price floor', () => {
@@ -83,14 +69,10 @@ describe('isEligible (watchlist)', () => {
   });
 
   it('still enforces 6-month listing age', () => {
-    expect(
-      isEligible(watchCtx({ listingDate: '2026-02-01' }), 10, TODAY),
-    ).toBe(false);
+    expect(isEligible(watchCtx({ listingDate: '2026-02-01' }), 10, TODAY)).toBe(false);
   });
 
   it('accepts a 7-month-old stock', () => {
-    expect(
-      isEligible(watchCtx({ listingDate: '2025-08-01' }), 10, TODAY),
-    ).toBe(true);
+    expect(isEligible(watchCtx({ listingDate: '2025-08-01' }), 10, TODAY)).toBe(true);
   });
 });

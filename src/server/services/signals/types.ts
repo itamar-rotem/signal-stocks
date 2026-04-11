@@ -1,11 +1,4 @@
-export type SignalType =
-  | 'SIG-01'
-  | 'SIG-02'
-  | 'SIG-03'
-  | 'SIG-04'
-  | 'SIG-05'
-  | 'SIG-06'
-  | 'SIG-07';
+export type SignalType = 'SIG-01' | 'SIG-02' | 'SIG-03' | 'SIG-04' | 'SIG-05' | 'SIG-06' | 'SIG-07';
 
 export type SignalStrength = 'medium' | 'strong' | 'very_strong';
 
