@@ -39,6 +39,7 @@ src/
     trpc/           tRPC routers (later)
     services/
       market-data/  FMP client, MA computation, EOD ingestion, cli.ts
+      fundamentals/ FMP ratios+metrics+income client, scoring, ingestion
       ...           signals, scoring, AI, alerts (later phases)
     inngest/        Pipeline step functions (later)
   components/
@@ -92,6 +93,7 @@ pnpm db:push          # apply Drizzle schema to Neon (Phase 2+)
 pnpm db:studio        # open Drizzle Studio (Phase 2+)
 pnpm db:seed          # load starter universe (after db:push)
 pnpm ingest:prices    # fetch EOD prices + compute MAs (needs FMP_API_KEY)
+pnpm ingest:fundamentals   # fetch ratios + score stocks (needs FMP_API_KEY)
 ```
 
 ## Design Spec and Plans
