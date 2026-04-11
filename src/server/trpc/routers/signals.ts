@@ -1,12 +1,7 @@
 import { z } from 'zod';
 import { desc, eq, isNull, notInArray, or } from 'drizzle-orm';
 import { db } from '@/server/db';
-import {
-  signals,
-  signalRecommendations,
-  signalRationales,
-  stocks,
-} from '@/server/db/schema';
+import { signals, signalRecommendations, signalRationales, stocks } from '@/server/db/schema';
 import { router, publicProcedure } from '../trpc';
 
 export interface SignalJoinRow {
@@ -140,18 +135,16 @@ export const signalsRouter = router({
         .select(signalSelect)
         .from(signals)
         .innerJoin(stocks, eq(stocks.id, signals.stockId))
-        .leftJoin(
-          signalRecommendations,
-          eq(signalRecommendations.signalId, signals.id),
-        )
+        .leftJoin(signalRecommendations, eq(signalRecommendations.signalId, signals.id))
         .leftJoin(signalRationales, eq(signalRationales.signalId, signals.id))
         .where(
           or(
             isNull(signalRecommendations.id),
-            notInArray(
-              signalRecommendations.state,
-              [...TERMINAL] as unknown as ('SELL' | 'STOP_HIT' | 'EXPIRED')[],
-            ),
+            notInArray(signalRecommendations.state, [...TERMINAL] as unknown as (
+              | 'SELL'
+              | 'STOP_HIT'
+              | 'EXPIRED'
+            )[]),
           ),
         )
         .orderBy(desc(signals.triggeredAt))
@@ -168,10 +161,7 @@ export const signalsRouter = router({
         .select(signalSelect)
         .from(signals)
         .innerJoin(stocks, eq(stocks.id, signals.stockId))
-        .leftJoin(
-          signalRecommendations,
-          eq(signalRecommendations.signalId, signals.id),
-        )
+        .leftJoin(signalRecommendations, eq(signalRecommendations.signalId, signals.id))
         .leftJoin(signalRationales, eq(signalRationales.signalId, signals.id))
         .where(eq(stocks.ticker, ticker))
         .orderBy(desc(signals.triggeredAt));

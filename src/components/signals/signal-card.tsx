@@ -32,19 +32,14 @@ function fmtScore(n: number | null): string {
 
 export function SignalCard(props: SignalCardProps) {
   return (
-    <Link
-      href={`/stock/${props.ticker}`}
-      className="block transition-shadow hover:shadow-md"
-    >
+    <Link href={`/stock/${props.ticker}`} className="block transition-shadow hover:shadow-md">
       <Card>
         <CardHeader className="pb-2">
           <div className="flex items-start justify-between gap-2">
             <div>
               <CardTitle className="text-lg">{props.ticker}</CardTitle>
               <p className="text-muted-foreground text-xs">{props.name}</p>
-              {props.sector && (
-                <p className="text-muted-foreground text-xs">{props.sector}</p>
-              )}
+              {props.sector && <p className="text-muted-foreground text-xs">{props.sector}</p>}
             </div>
             <RecommendationStateBadge state={props.state} />
           </div>
@@ -52,9 +47,7 @@ export function SignalCard(props: SignalCardProps) {
         <CardContent className="space-y-3 text-sm">
           <div className="flex flex-wrap items-center gap-2">
             <Badge variant="outline">{signalTypeLabel(props.signalType)}</Badge>
-            <Badge
-              variant={props.strength === 'very_strong' ? 'success' : 'secondary'}
-            >
+            <Badge variant={props.strength === 'very_strong' ? 'success' : 'secondary'}>
               {props.strength.replace('_', ' ')}
             </Badge>
             {props.volumeConfirmed && <Badge variant="info">Volume ✓</Badge>}
@@ -65,10 +58,7 @@ export function SignalCard(props: SignalCardProps) {
             <Stat label="Last price" value={fmtPrice(props.lastPrice)} />
             <Stat label="Target" value={fmtPrice(props.targetPrice)} />
             <Stat label="Stop" value={fmtPrice(props.stopLoss)} />
-            <Stat
-              label="Triggered"
-              value={props.triggeredAt.toISOString().slice(0, 10)}
-            />
+            <Stat label="Triggered" value={props.triggeredAt.toISOString().slice(0, 10)} />
           </div>
         </CardContent>
       </Card>

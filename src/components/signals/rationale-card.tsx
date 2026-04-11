@@ -16,9 +16,7 @@ export function RationaleCard(props: RationaleCardProps) {
       <CardHeader>
         <div className="flex items-center justify-between gap-2">
           <CardTitle>AI Rationale</CardTitle>
-          {props.confidence && (
-            <Badge variant="outline">Confidence: {props.confidence}</Badge>
-          )}
+          {props.confidence && <Badge variant="outline">Confidence: {props.confidence}</Badge>}
         </div>
       </CardHeader>
       <CardContent className="space-y-4 text-sm">
@@ -29,12 +27,8 @@ export function RationaleCard(props: RationaleCardProps) {
         {props.technicalContext && (
           <Section label="Technical context">{props.technicalContext}</Section>
         )}
-        {props.strategyNote && (
-          <Section label="Strategy note">{props.strategyNote}</Section>
-        )}
-        <p className="text-muted-foreground border-t pt-3 text-xs italic">
-          {props.disclaimer}
-        </p>
+        {props.strategyNote && <Section label="Strategy note">{props.strategyNote}</Section>}
+        <p className="text-muted-foreground border-t pt-3 text-xs italic">{props.disclaimer}</p>
       </CardContent>
     </Card>
   );
@@ -43,9 +37,7 @@ export function RationaleCard(props: RationaleCardProps) {
 function Section({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div>
-      <div className="text-muted-foreground text-xs font-medium uppercase">
-        {label}
-      </div>
+      <div className="text-muted-foreground text-xs font-medium uppercase">{label}</div>
       <div className="mt-1 whitespace-pre-line">{children}</div>
     </div>
   );

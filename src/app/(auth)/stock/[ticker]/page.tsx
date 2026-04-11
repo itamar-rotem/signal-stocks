@@ -86,9 +86,7 @@ export default async function StockDetailPage({ params }: PageProps) {
                   <div className="flex items-center gap-3 text-sm">
                     <span>Target {fmtPrice(s.recommendation?.targetPrice ?? null)}</span>
                     <span>Stop {fmtPrice(s.recommendation?.stopLoss ?? null)}</span>
-                    <RecommendationStateBadge
-                      state={s.recommendation?.state ?? null}
-                    />
+                    <RecommendationStateBadge state={s.recommendation?.state ?? null} />
                   </div>
                 </li>
               ))}
