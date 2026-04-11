@@ -1,7 +1,13 @@
 import { z } from 'zod';
 import { desc, eq, isNull, notInArray, or } from 'drizzle-orm';
 import { db } from '@/server/db';
-import { signals, signalRecommendations, signalRationales, stocks, dailyPrices } from '@/server/db/schema';
+import {
+  signals,
+  signalRecommendations,
+  signalRationales,
+  stocks,
+  dailyPrices,
+} from '@/server/db/schema';
 import { router, publicProcedure } from '../trpc';
 import {
   transformPriceHistoryRows,

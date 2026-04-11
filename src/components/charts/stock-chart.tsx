@@ -66,9 +66,7 @@ export function StockChart({ bars, ma200Series, markers, height = 360 }: StockCh
         priceLineVisible: false,
         lastValueVisible: false,
       });
-      lineSeries.setData(
-        ma200Series.map((p) => ({ time: p.time as Time, value: p.value })),
-      );
+      lineSeries.setData(ma200Series.map((p) => ({ time: p.time as Time, value: p.value })));
     }
 
     if (markers.length > 0) {

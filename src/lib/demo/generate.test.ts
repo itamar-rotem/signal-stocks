@@ -3,8 +3,18 @@ import { generateSyntheticSeries } from './generate';
 
 describe('generateSyntheticSeries', () => {
   it('produces a deterministic OHLCV series for a given seed', () => {
-    const a = generateSyntheticSeries({ seed: 42, days: 250, startPrice: 100, endDate: '2026-04-10' });
-    const b = generateSyntheticSeries({ seed: 42, days: 250, startPrice: 100, endDate: '2026-04-10' });
+    const a = generateSyntheticSeries({
+      seed: 42,
+      days: 250,
+      startPrice: 100,
+      endDate: '2026-04-10',
+    });
+    const b = generateSyntheticSeries({
+      seed: 42,
+      days: 250,
+      startPrice: 100,
+      endDate: '2026-04-10',
+    });
 
     expect(a.length).toBe(250);
     expect(b.length).toBe(250);
@@ -15,7 +25,12 @@ describe('generateSyntheticSeries', () => {
   });
 
   it('computes ma200 only after 200 bars are available', () => {
-    const rows = generateSyntheticSeries({ seed: 7, days: 250, startPrice: 50, endDate: '2026-04-10' });
+    const rows = generateSyntheticSeries({
+      seed: 7,
+      days: 250,
+      startPrice: 50,
+      endDate: '2026-04-10',
+    });
     expect(rows[0].ma200).toBeNull();
     expect(rows[198].ma200).toBeNull();
     expect(rows[199].ma200).not.toBeNull();
@@ -23,7 +38,12 @@ describe('generateSyntheticSeries', () => {
   });
 
   it('each row has valid OHLC relationships', () => {
-    const rows = generateSyntheticSeries({ seed: 3, days: 50, startPrice: 25, endDate: '2026-04-10' });
+    const rows = generateSyntheticSeries({
+      seed: 3,
+      days: 50,
+      startPrice: 25,
+      endDate: '2026-04-10',
+    });
     for (const r of rows) {
       const o = Number(r.open);
       const h = Number(r.high);
