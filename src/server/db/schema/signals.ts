@@ -89,6 +89,7 @@ export const signalRecommendations = pgTable(
       table.signalId,
       table.state,
     ),
+    signalIdUniq: uniqueIndex('signal_recommendations_signal_id_idx').on(table.signalId),
   }),
 );
 
