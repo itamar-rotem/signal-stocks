@@ -40,7 +40,8 @@ src/
     services/
       market-data/  FMP client, MA computation, EOD ingestion, cli.ts
       fundamentals/ FMP ratios+metrics+income client, scoring, ingestion
-      ...           signals, scoring, AI, alerts (later phases)
+      signals/      eligibility, detectors, composite scoring, ingestion
+      ...           scoring, AI, alerts (later phases)
     inngest/        Pipeline step functions (later)
   components/
     ui/             shadcn/ui primitives (button, card, ...)
@@ -94,6 +95,7 @@ pnpm db:studio        # open Drizzle Studio (Phase 2+)
 pnpm db:seed          # load starter universe (after db:push)
 pnpm ingest:prices    # fetch EOD prices + compute MAs (needs FMP_API_KEY)
 pnpm ingest:fundamentals   # fetch ratios + score stocks (needs FMP_API_KEY)
+pnpm detect:signals        # run signal detectors against stored prices+fundamentals
 ```
 
 ## Design Spec and Plans

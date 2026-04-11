@@ -20,7 +20,8 @@
     "db:studio": "drizzle-kit studio",
     "db:seed": "tsx src/server/db/seed.ts",
     "ingest:prices": "tsx src/server/services/market-data/cli.ts",
-    "ingest:fundamentals": "tsx src/server/services/fundamentals/cli.ts"
+    "ingest:fundamentals": "tsx src/server/services/fundamentals/cli.ts",
+    "detect:signals": "tsx src/server/services/signals/cli.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.3.0",
