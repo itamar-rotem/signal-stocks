@@ -1,4 +1,12 @@
 import { z } from 'zod';
+import { desc, eq, isNull, notInArray, or } from 'drizzle-orm';
+import { db } from '@/server/db';
+import {
+  signals,
+  signalRecommendations,
+  signalRationales,
+  stocks,
+} from '@/server/db/schema';
 import { router, publicProcedure } from '../trpc';
 
 export interface SignalJoinRow {
@@ -95,6 +103,28 @@ export function transformSignalRow(row: SignalJoinRow): SignalViewModel {
 
 const TERMINAL = ['SELL', 'STOP_HIT', 'EXPIRED'] as const;
 
+const signalSelect = {
+  signalId: signals.id,
+  signalType: signals.signalType,
+  strength: signals.strength,
+  volumeConfirmed: signals.volumeConfirmed,
+  fundamentalScore: signals.fundamentalScore,
+  signalScore: signals.signalScore,
+  triggeredAt: signals.triggeredAt,
+  stockId: stocks.id,
+  ticker: stocks.ticker,
+  name: stocks.name,
+  sector: stocks.sector,
+  lastPrice: stocks.price,
+  recState: signalRecommendations.state,
+  recTargetPrice: signalRecommendations.targetPrice,
+  recStopLoss: signalRecommendations.stopLoss,
+  recTrailingStop: signalRecommendations.trailingStop,
+  recTransitionedAt: signalRecommendations.transitionedAt,
+  rationaleSummary: signalRationales.summary,
+  rationaleConfidence: signalRationales.confidence,
+} as const;
+
 export const signalsRouter = router({
   list: publicProcedure
     .input(
@@ -105,36 +135,7 @@ export const signalsRouter = router({
         .optional(),
     )
     .query(async ({ input }) => {
-      const { db } = await import('@/server/db');
-      const { desc, eq, isNull, notInArray, or } = await import('drizzle-orm');
-      const { signals, signalRecommendations, signalRationales, stocks } = await import(
-        '@/server/db/schema'
-      );
-
       const limit = input?.limit ?? 20;
-
-      const signalSelect = {
-        signalId: signals.id,
-        signalType: signals.signalType,
-        strength: signals.strength,
-        volumeConfirmed: signals.volumeConfirmed,
-        fundamentalScore: signals.fundamentalScore,
-        signalScore: signals.signalScore,
-        triggeredAt: signals.triggeredAt,
-        stockId: stocks.id,
-        ticker: stocks.ticker,
-        name: stocks.name,
-        sector: stocks.sector,
-        lastPrice: stocks.price,
-        recState: signalRecommendations.state,
-        recTargetPrice: signalRecommendations.targetPrice,
-        recStopLoss: signalRecommendations.stopLoss,
-        recTrailingStop: signalRecommendations.trailingStop,
-        recTransitionedAt: signalRecommendations.transitionedAt,
-        rationaleSummary: signalRationales.summary,
-        rationaleConfidence: signalRationales.confidence,
-      } as const;
-
       const rows = await db
         .select(signalSelect)
         .from(signals)
@@ -147,7 +148,10 @@ export const signalsRouter = router({
         .where(
           or(
             isNull(signalRecommendations.id),
-            notInArray(signalRecommendations.state, [...TERMINAL] as unknown as ('SELL' | 'STOP_HIT' | 'EXPIRED')[]),
+            notInArray(
+              signalRecommendations.state,
+              [...TERMINAL] as unknown as ('SELL' | 'STOP_HIT' | 'EXPIRED')[],
+            ),
           ),
         )
         .orderBy(desc(signals.triggeredAt))
@@ -159,34 +163,6 @@ export const signalsRouter = router({
   byTicker: publicProcedure
     .input(z.object({ ticker: z.string().min(1).max(10) }))
     .query(async ({ input }) => {
-      const { db } = await import('@/server/db');
-      const { desc, eq } = await import('drizzle-orm');
-      const { signals, signalRecommendations, signalRationales, stocks } = await import(
-        '@/server/db/schema'
-      );
-
-      const signalSelect = {
-        signalId: signals.id,
-        signalType: signals.signalType,
-        strength: signals.strength,
-        volumeConfirmed: signals.volumeConfirmed,
-        fundamentalScore: signals.fundamentalScore,
-        signalScore: signals.signalScore,
-        triggeredAt: signals.triggeredAt,
-        stockId: stocks.id,
-        ticker: stocks.ticker,
-        name: stocks.name,
-        sector: stocks.sector,
-        lastPrice: stocks.price,
-        recState: signalRecommendations.state,
-        recTargetPrice: signalRecommendations.targetPrice,
-        recStopLoss: signalRecommendations.stopLoss,
-        recTrailingStop: signalRecommendations.trailingStop,
-        recTransitionedAt: signalRecommendations.transitionedAt,
-        rationaleSummary: signalRationales.summary,
-        rationaleConfidence: signalRationales.confidence,
-      } as const;
-
       const ticker = input.ticker.toUpperCase();
       const rows = await db
         .select(signalSelect)
