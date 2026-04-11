@@ -60,6 +60,7 @@ CLAUDE.md                            # document fundamentals service
 ## Task 1: FMP fundamental response schemas with fixtures (TDD)
 
 **Files:**
+
 - Create: `src/server/services/fundamentals/fundamentals-schemas.ts`
 - Create: `src/server/services/fundamentals/fundamentals-schemas.test.ts`
 - Create: `src/server/services/fundamentals/fixtures/aapl-ratios-small.json`
@@ -69,6 +70,7 @@ CLAUDE.md                            # document fundamentals service
 - [ ] **Step 1: Create fixtures**
 
 `fixtures/aapl-ratios-small.json`:
+
 ```json
 [
   {
@@ -77,7 +79,7 @@ CLAUDE.md                            # document fundamentals service
     "calendarYear": "2026",
     "period": "Q1",
     "grossProfitMargin": 0.45,
-    "operatingProfitMargin": 0.30,
+    "operatingProfitMargin": 0.3,
     "netProfitMargin": 0.25,
     "returnOnEquity": 1.55,
     "returnOnAssets": 0.28,
@@ -95,7 +97,7 @@ CLAUDE.md                            # document fundamentals service
     "grossProfitMargin": 0.44,
     "operatingProfitMargin": 0.29,
     "netProfitMargin": 0.24,
-    "returnOnEquity": 1.50,
+    "returnOnEquity": 1.5,
     "returnOnAssets": 0.27,
     "currentRatio": 1.08,
     "debtEquityRatio": 1.88,
@@ -107,6 +109,7 @@ CLAUDE.md                            # document fundamentals service
 ```
 
 `fixtures/aapl-key-metrics-small.json`:
+
 ```json
 [
   {
@@ -135,6 +138,7 @@ CLAUDE.md                            # document fundamentals service
 ```
 
 `fixtures/aapl-income-statement-small.json`:
+
 ```json
 [
   {
@@ -179,6 +183,7 @@ CLAUDE.md                            # document fundamentals service
 - [ ] **Step 2: Failing test**
 
 Create `fundamentals-schemas.test.ts`:
+
 ```typescript
 import { describe, it, expect } from 'vitest';
 import {
@@ -341,6 +346,7 @@ git commit -m "feat(fundamentals): add FMP fundamental response schemas with fix
 ## Task 2: Percentile ranking (pure, TDD)
 
 **Files:**
+
 - Create: `src/server/services/fundamentals/percentile.ts`
 - Create: `src/server/services/fundamentals/percentile.test.ts`
 
@@ -473,6 +479,7 @@ git commit -m "feat(fundamentals): add pure percentile ranking with lowerIsBette
 ## Task 3: Scoring functions (pure, TDD)
 
 **Files:**
+
 - Create: `src/server/services/fundamentals/scoring.ts`
 - Create: `src/server/services/fundamentals/scoring.test.ts`
 
@@ -681,10 +688,7 @@ function averagePresent(scores: (number | null)[]): number | null {
  * Profitability (30% of composite): margins + returns.
  * Higher is better for all six metrics.
  */
-export function scoreProfitability(
-  metrics: FundamentalMetrics,
-  peers: PeerMetrics,
-): number | null {
+export function scoreProfitability(metrics: FundamentalMetrics, peers: PeerMetrics): number | null {
   const scores = [
     percentileRank(metrics.grossMargin, peers.grossMargin),
     percentileRank(metrics.operatingMargin, peers.operatingMargin),
@@ -700,10 +704,7 @@ export function scoreProfitability(
  * Growth (25% of composite): revenue + EPS growth.
  * Higher is better.
  */
-export function scoreGrowth(
-  metrics: FundamentalMetrics,
-  peers: PeerMetrics,
-): number | null {
+export function scoreGrowth(metrics: FundamentalMetrics, peers: PeerMetrics): number | null {
   const scores = [
     percentileRank(metrics.revenueGrowthYoy, peers.revenueGrowthYoy),
     percentileRank(metrics.epsGrowth, peers.epsGrowth),
@@ -735,10 +736,7 @@ export function scoreFinancialHealth(
  * Valuation (20% of composite): P/E, PEG, EV/EBITDA.
  * All three are lowerIsBetter.
  */
-export function scoreValuation(
-  metrics: FundamentalMetrics,
-  peers: PeerMetrics,
-): number | null {
+export function scoreValuation(metrics: FundamentalMetrics, peers: PeerMetrics): number | null {
   const scores = [
     percentileRank(metrics.forwardPe, peers.forwardPe, { lowerIsBetter: true }),
     percentileRank(metrics.pegRatio, peers.pegRatio, { lowerIsBetter: true }),
@@ -789,6 +787,7 @@ git commit -m "feat(fundamentals): add pure scoring functions (profitability/gro
 ## Task 4: FMP fundamentals client
 
 **Files:**
+
 - Create: `src/server/services/fundamentals/fmp-fundamentals-client.ts`
 
 - [ ] **Step 1: Implement**
@@ -834,10 +833,7 @@ export class FmpFundamentalsClient implements FundamentalsProvider {
       );
     }
     if (!response.ok) {
-      throw new FmpApiError(
-        `FMP returned ${response.status} for ${ticker}`,
-        response.status,
-      );
+      throw new FmpApiError(`FMP returned ${response.status} for ${ticker}`, response.status);
     }
     return response.json();
   }
@@ -897,6 +893,7 @@ git commit -m "feat(fundamentals): add FMP fundamentals HTTP client"
 ## Task 5: Ingestion orchestrator
 
 **Files:**
+
 - Create: `src/server/services/fundamentals/ingestion.ts`
 
 This orchestrator is two-pass: fetch all raw fundamentals first (needed for peer comparisons within sectors), then score each stock against its sector peers, then upsert.
@@ -907,10 +904,7 @@ This orchestrator is two-pass: fetch all raw fundamentals first (needed for peer
 import { inArray, sql } from 'drizzle-orm';
 import { db } from '@/server/db';
 import { stocks, fundamentals } from '@/server/db/schema';
-import {
-  FmpFundamentalsClient,
-  type FundamentalsProvider,
-} from './fmp-fundamentals-client';
+import { FmpFundamentalsClient, type FundamentalsProvider } from './fmp-fundamentals-client';
 import { deriveQuarter } from './fundamentals-schemas';
 import {
   scoreProfitability,
@@ -1055,9 +1049,7 @@ export async function ingestFundamentalsForTickers(
           : null;
 
       const epsGrowth =
-        latestIncome.eps != null &&
-        yearAgoIncome?.eps != null &&
-        yearAgoIncome.eps !== 0
+        latestIncome.eps != null && yearAgoIncome?.eps != null && yearAgoIncome.eps !== 0
           ? (latestIncome.eps - yearAgoIncome.eps) / Math.abs(yearAgoIncome.eps)
           : null;
 
@@ -1110,8 +1102,7 @@ export async function ingestFundamentalsForTickers(
   // Pass 3: score + upsert
   for (const raw of raws) {
     const sectorPeers = bySector.get(raw.sector ?? '__unknown__') ?? [];
-    const peerMetrics =
-      sectorPeers.length > 1 ? buildPeerMetrics(sectorPeers) : EMPTY_PEERS;
+    const peerMetrics = sectorPeers.length > 1 ? buildPeerMetrics(sectorPeers) : EMPTY_PEERS;
 
     const profitability = scoreProfitability(raw.metrics, peerMetrics);
     const growth = scoreGrowth(raw.metrics, peerMetrics);
@@ -1119,8 +1110,7 @@ export async function ingestFundamentalsForTickers(
     const valuation = scoreValuation(raw.metrics, peerMetrics);
     const composite = scoreComposite(profitability, growth, health, valuation);
 
-    const toStr = (n: number | null): string | null =>
-      n === null ? null : String(n);
+    const toStr = (n: number | null): string | null => (n === null ? null : String(n));
 
     try {
       await db
@@ -1190,13 +1180,17 @@ export async function ingestFundamentalsForTickers(
 ```
 
 Note: the `eps` line in the insert values above has a copy-paste artifact — replace with a straight `toStr(raw.eps)`:
+
 ```typescript
 eps: toStr(raw.eps),
 ```
+
 Make sure revenue handles the bigint column correctly (bigint column with mode: 'number' expects a number, not a string):
+
 ```typescript
 revenue: raw.revenue,
 ```
+
 Both are shown correctly in the listing above as `raw.revenue` (number) and `toStr(raw.eps)` (string).
 
 - [ ] **Step 2: Typecheck**
@@ -1217,6 +1211,7 @@ git commit -m "feat(fundamentals): add ingestion orchestrator with sector-percen
 ## Task 6: CLI + barrel + npm script + docs + push
 
 **Files:**
+
 - Create: `src/server/services/fundamentals/cli.ts`
 - Create: `src/server/services/fundamentals/index.ts`
 - Modify: `package.json`
@@ -1279,6 +1274,7 @@ main()
 - [ ] **Step 3: Add npm script**
 
 In `package.json` under `"scripts"`, after `"ingest:prices"`:
+
 ```json
 "ingest:fundamentals": "tsx src/server/services/fundamentals/cli.ts"
 ```
@@ -1286,11 +1282,13 @@ In `package.json` under `"scripts"`, after `"ingest:prices"`:
 - [ ] **Step 4: Update CLAUDE.md**
 
 Add to "Running Locally" section after `pnpm ingest:prices`:
+
 ```
 pnpm ingest:fundamentals   # fetch ratios + score stocks (needs FMP_API_KEY)
 ```
 
 Add to "Project Structure" under `services/`:
+
 ```
       fundamentals/ FMP ratios+metrics+income client, scoring, ingestion
 ```
@@ -1329,6 +1327,7 @@ git push origin main
 - [x] All tests pass, lint/format/build clean, pushed
 
 ## Out of Scope
+
 - Full annual + TTM scoring — just latest quarter for now
 - Earnings surprise (not in free tier FMP data)
 - Sector median fallback when a stock has no peers — defaults to 50

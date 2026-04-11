@@ -69,6 +69,7 @@ CLAUDE.md                            # document signals service
 ## Task 1: Types and PriceBar (TDD smoke)
 
 **Files:**
+
 - Create: `src/server/services/signals/types.ts`
 - Create: `src/server/services/signals/types.test.ts`
 
@@ -132,14 +133,7 @@ pnpm test:run src/server/services/signals/types.test.ts
 - [ ] **Step 3: Implement `types.ts`**
 
 ```typescript
-export type SignalType =
-  | 'SIG-01'
-  | 'SIG-02'
-  | 'SIG-03'
-  | 'SIG-04'
-  | 'SIG-05'
-  | 'SIG-06'
-  | 'SIG-07';
+export type SignalType = 'SIG-01' | 'SIG-02' | 'SIG-03' | 'SIG-04' | 'SIG-05' | 'SIG-06' | 'SIG-07';
 
 export type SignalStrength = 'medium' | 'strong' | 'very_strong';
 
@@ -188,19 +182,20 @@ git commit -m "feat(signals): add PriceBar / DetectedSignal / StockContext types
 ## Task 2: Eligibility gate (pure, TDD)
 
 **Files:**
+
 - Create: `src/server/services/signals/eligibility.ts`
 - Create: `src/server/services/signals/eligibility.test.ts`
 
 Eligibility spec (from PRD Section 4.1):
 
-| Filter           | System (strict)   | Watchlist (relaxed) |
-| ---------------- | ----------------- | ------------------- |
-| Exchange         | NYSE/NASDAQ/AMEX  | same                |
-| Market Cap       | ≥ $500M           | ≥ $0 (ignored)      |
-| Avg Daily Volume | ≥ 500K            | ignored             |
-| Price (close)    | ≥ $5              | ≥ $2                |
-| Listing Age      | ≥ 12 months       | ≥ 6 months          |
-| Fundamental Score| ≥ 60              | ignored             |
+| Filter            | System (strict)  | Watchlist (relaxed) |
+| ----------------- | ---------------- | ------------------- |
+| Exchange          | NYSE/NASDAQ/AMEX | same                |
+| Market Cap        | ≥ $500M          | ≥ $0 (ignored)      |
+| Avg Daily Volume  | ≥ 500K           | ignored             |
+| Price (close)     | ≥ $5             | ≥ $2                |
+| Listing Age       | ≥ 12 months      | ≥ 6 months          |
+| Fundamental Score | ≥ 60             | ignored             |
 
 - [ ] **Step 1: Failing test**
 
@@ -229,15 +224,11 @@ describe('isEligible (system)', () => {
   });
 
   it('rejects market cap < $500M', () => {
-    expect(isEligible(systemCtx({ marketCap: 400_000_000 }), LAST_CLOSE, TODAY)).toBe(
-      false,
-    );
+    expect(isEligible(systemCtx({ marketCap: 400_000_000 }), LAST_CLOSE, TODAY)).toBe(false);
   });
 
   it('rejects avg volume < 500K', () => {
-    expect(isEligible(systemCtx({ avgDailyVolume20: 400_000 }), LAST_CLOSE, TODAY)).toBe(
-      false,
-    );
+    expect(isEligible(systemCtx({ avgDailyVolume20: 400_000 }), LAST_CLOSE, TODAY)).toBe(false);
   });
 
   it('rejects price < $5', () => {
@@ -245,15 +236,11 @@ describe('isEligible (system)', () => {
   });
 
   it('rejects listing age < 12 months', () => {
-    expect(
-      isEligible(systemCtx({ firstListedAt: '2025-11-01' }), LAST_CLOSE, TODAY),
-    ).toBe(false);
+    expect(isEligible(systemCtx({ firstListedAt: '2025-11-01' }), LAST_CLOSE, TODAY)).toBe(false);
   });
 
   it('rejects fundamental score < 60', () => {
-    expect(isEligible(systemCtx({ fundamentalScore: 55 }), LAST_CLOSE, TODAY)).toBe(
-      false,
-    );
+    expect(isEligible(systemCtx({ fundamentalScore: 55 }), LAST_CLOSE, TODAY)).toBe(false);
   });
 
   it('rejects unknown exchange', () => {
@@ -265,9 +252,7 @@ describe('isEligible (system)', () => {
   });
 
   it('rejects null fundamental score for system source', () => {
-    expect(
-      isEligible(systemCtx({ fundamentalScore: null }), LAST_CLOSE, TODAY),
-    ).toBe(false);
+    expect(isEligible(systemCtx({ fundamentalScore: null }), LAST_CLOSE, TODAY)).toBe(false);
   });
 });
 
@@ -276,13 +261,9 @@ describe('isEligible (watchlist)', () => {
     systemCtx({ source: 'watchlist', ...overrides });
 
   it('ignores market cap and fundamental score', () => {
-    expect(
-      isEligible(
-        watchCtx({ marketCap: 100_000_000, fundamentalScore: 10 }),
-        10,
-        TODAY,
-      ),
-    ).toBe(true);
+    expect(isEligible(watchCtx({ marketCap: 100_000_000, fundamentalScore: 10 }), 10, TODAY)).toBe(
+      true,
+    );
   });
 
   it('still enforces $2 price floor', () => {
@@ -290,15 +271,11 @@ describe('isEligible (watchlist)', () => {
   });
 
   it('still enforces 6-month listing age', () => {
-    expect(
-      isEligible(watchCtx({ firstListedAt: '2026-02-01' }), 10, TODAY),
-    ).toBe(false);
+    expect(isEligible(watchCtx({ firstListedAt: '2026-02-01' }), 10, TODAY)).toBe(false);
   });
 
   it('accepts a 7-month-old stock', () => {
-    expect(
-      isEligible(watchCtx({ firstListedAt: '2025-08-01' }), 10, TODAY),
-    ).toBe(true);
+    expect(isEligible(watchCtx({ firstListedAt: '2025-08-01' }), 10, TODAY)).toBe(true);
   });
 });
 ```
@@ -326,17 +303,12 @@ function monthsBetween(fromIso: string, toIso: string): number {
  * `source === 'system'` uses PRD strict filters.
  * `source === 'watchlist'` uses the relaxed filters.
  */
-export function isEligible(
-  ctx: StockContext,
-  lastClose: number,
-  today: string,
-): boolean {
+export function isEligible(ctx: StockContext, lastClose: number, today: string): boolean {
   if (!ALLOWED_EXCHANGES.has(ctx.exchange)) return false;
 
   if (ctx.source === 'system') {
     if (ctx.marketCap === null || ctx.marketCap < 500_000_000) return false;
-    if (ctx.avgDailyVolume20 === null || ctx.avgDailyVolume20 < 500_000)
-      return false;
+    if (ctx.avgDailyVolume20 === null || ctx.avgDailyVolume20 < 500_000) return false;
     if (lastClose < 5) return false;
     if (ctx.fundamentalScore === null || ctx.fundamentalScore < 60) return false;
     if (ctx.firstListedAt === null) return false;
@@ -366,6 +338,7 @@ git commit -m "feat(signals): add eligibility gate for system and watchlist sour
 ## Task 3: Volume confirmation helper (pure, TDD)
 
 **Files:**
+
 - Create: `src/server/services/signals/volume-confirmation.ts`
 - Create: `src/server/services/signals/volume-confirmation.test.ts`
 
@@ -483,6 +456,7 @@ git commit -m "feat(signals): add 20-day volume confirmation helper"
 ## Task 4: SIG-01 MA200 Approaching detector (TDD)
 
 **Files:**
+
 - Create: `src/server/services/signals/detectors/ma200-approaching.ts`
 - Create: `src/server/services/signals/detectors/ma200-approaching.test.ts`
 
@@ -565,9 +539,7 @@ export const APPROACH_PCT = 0.02;
  * SIG-01 MA200 Approaching.
  * Trigger: latest close is within 2% below MA200 and MA200 slope is positive.
  */
-export function detectMa200Approaching(
-  bars: PriceBar[],
-): DetectedSignal | null {
+export function detectMa200Approaching(bars: PriceBar[]): DetectedSignal | null {
   if (bars.length === 0) return null;
   const last = bars[bars.length - 1];
   if (last.ma200 === null || last.ma200Slope === null) return null;
@@ -600,6 +572,7 @@ git commit -m "feat(signals): add SIG-01 MA200 approaching detector"
 ## Task 5: SIG-03 MA150 Approaching detector (TDD)
 
 **Files:**
+
 - Create: `src/server/services/signals/detectors/ma150-approaching.ts`
 - Create: `src/server/services/signals/detectors/ma150-approaching.test.ts`
 
@@ -613,9 +586,7 @@ Symmetric to SIG-01 but against `ma150`.
 import type { PriceBar, DetectedSignal } from '../types';
 import { APPROACH_PCT } from './ma200-approaching';
 
-export function detectMa150Approaching(
-  bars: PriceBar[],
-): DetectedSignal | null {
+export function detectMa150Approaching(bars: PriceBar[]): DetectedSignal | null {
   if (bars.length === 0) return null;
   const last = bars[bars.length - 1];
   if (last.ma150 === null || last.ma150Slope === null) return null;
@@ -645,6 +616,7 @@ git commit -m "feat(signals): add SIG-03 MA150 approaching detector"
 ## Task 6: SIG-02 MA200 Breakout detector (TDD)
 
 **Files:**
+
 - Create: `src/server/services/signals/detectors/ma200-breakout.ts`
 - Create: `src/server/services/signals/detectors/ma200-breakout.test.ts`
 
@@ -687,13 +659,7 @@ describe('detectMa200Breakout (SIG-02)', () => {
   });
 
   it('does not trigger without enough prior below-bars', () => {
-    const short = [
-      mkBar(95, 0),
-      mkBar(95, 1),
-      mkBar(95, 2),
-      mkBar(105, 3),
-      mkBar(106, 4),
-    ];
+    const short = [mkBar(95, 0), mkBar(95, 1), mkBar(95, 2), mkBar(105, 3), mkBar(106, 4)];
     expect(detectMa200Breakout(short)).toBeNull();
   });
 
@@ -763,9 +729,7 @@ export function detectMaBreakout(
   };
 }
 
-export function detectMa200Breakout(
-  bars: PriceBar[],
-): DetectedSignal | null {
+export function detectMa200Breakout(bars: PriceBar[]): DetectedSignal | null {
   return detectMaBreakout(bars, 'ma200', 'SIG-02');
 }
 ```
@@ -784,6 +748,7 @@ git commit -m "feat(signals): add SIG-02 MA200 breakout detector with shared hel
 ## Task 7: SIG-04 MA150 Breakout detector (TDD)
 
 **Files:**
+
 - Create: `src/server/services/signals/detectors/ma150-breakout.ts`
 - Create: `src/server/services/signals/detectors/ma150-breakout.test.ts`
 
@@ -795,9 +760,7 @@ git commit -m "feat(signals): add SIG-02 MA200 breakout detector with shared hel
 import type { PriceBar, DetectedSignal } from '../types';
 import { detectMaBreakout } from './ma200-breakout';
 
-export function detectMa150Breakout(
-  bars: PriceBar[],
-): DetectedSignal | null {
+export function detectMa150Breakout(bars: PriceBar[]): DetectedSignal | null {
   return detectMaBreakout(bars, 'ma150', 'SIG-04');
 }
 ```
@@ -813,6 +776,7 @@ git commit -m "feat(signals): add SIG-04 MA150 breakout detector"
 ## Task 8: SIG-05 Dual MA Breakout detector (TDD)
 
 **Files:**
+
 - Create: `src/server/services/signals/detectors/dual-ma-breakout.ts`
 - Create: `src/server/services/signals/detectors/dual-ma-breakout.test.ts`
 
@@ -825,12 +789,7 @@ import { describe, it, expect } from 'vitest';
 import { detectDualMaBreakout } from './dual-ma-breakout';
 import type { PriceBar } from '../types';
 
-function mkBar(
-  close: number,
-  ma150: number | null,
-  ma200: number | null,
-  i: number,
-): PriceBar {
+function mkBar(close: number, ma150: number | null, ma200: number | null, i: number): PriceBar {
   return {
     date: `2026-03-${String(i + 1).padStart(2, '0')}`,
     close,
@@ -875,9 +834,7 @@ describe('detectDualMaBreakout (SIG-05)', () => {
   });
 
   it('returns null when MAs are missing', () => {
-    const bars: PriceBar[] = Array.from({ length: 14 }, (_, i) =>
-      mkBar(100, null, null, i),
-    );
+    const bars: PriceBar[] = Array.from({ length: 14 }, (_, i) => mkBar(100, null, null, i));
     expect(detectDualMaBreakout(bars)).toBeNull();
   });
 });
@@ -897,10 +854,7 @@ export const DUAL_WINDOW_DAYS = 5;
  * at which the bar closes above MA after having been below on the prior bar.
  * Searches the most recent 15 bars. Returns -1 if not found.
  */
-function findRecentBreakIndex(
-  bars: PriceBar[],
-  maKey: 'ma150' | 'ma200',
-): number {
+function findRecentBreakIndex(bars: PriceBar[], maKey: 'ma150' | 'ma200'): number {
   const windowStart = Math.max(1, bars.length - 15);
   let latest = -1;
   for (let i = windowStart; i < bars.length; i++) {
@@ -916,9 +870,7 @@ function findRecentBreakIndex(
   return latest;
 }
 
-export function detectDualMaBreakout(
-  bars: PriceBar[],
-): DetectedSignal | null {
+export function detectDualMaBreakout(bars: PriceBar[]): DetectedSignal | null {
   if (bars.length < 2) return null;
   const ma150Idx = findRecentBreakIndex(bars, 'ma150');
   const ma200Idx = findRecentBreakIndex(bars, 'ma200');
@@ -953,6 +905,7 @@ git commit -m "feat(signals): add SIG-05 dual MA breakout detector"
 ## Task 9: SIG-06 Golden Cross Setup detector (TDD)
 
 **Files:**
+
 - Create: `src/server/services/signals/detectors/golden-cross.ts`
 - Create: `src/server/services/signals/detectors/golden-cross.test.ts`
 
@@ -965,12 +918,7 @@ import { describe, it, expect } from 'vitest';
 import { detectGoldenCross } from './golden-cross';
 import type { PriceBar } from '../types';
 
-function mkBar(
-  close: number,
-  ma150: number | null,
-  ma200: number | null,
-  i: number,
-): PriceBar {
+function mkBar(close: number, ma150: number | null, ma200: number | null, i: number): PriceBar {
   return {
     date: `2026-03-${String(i + 1).padStart(2, '0')}`,
     close,
@@ -1016,18 +964,11 @@ describe('detectGoldenCross (SIG-06)', () => {
 ```typescript
 import type { PriceBar, DetectedSignal } from '../types';
 
-export function detectGoldenCross(
-  bars: PriceBar[],
-): DetectedSignal | null {
+export function detectGoldenCross(bars: PriceBar[]): DetectedSignal | null {
   if (bars.length < 2) return null;
   const prev = bars[bars.length - 2];
   const curr = bars[bars.length - 1];
-  if (
-    prev.ma150 === null ||
-    prev.ma200 === null ||
-    curr.ma150 === null ||
-    curr.ma200 === null
-  ) {
+  if (prev.ma150 === null || prev.ma200 === null || curr.ma150 === null || curr.ma200 === null) {
     return null;
   }
   const crossed = prev.ma150 <= prev.ma200 && curr.ma150 > curr.ma200;
@@ -1057,6 +998,7 @@ git commit -m "feat(signals): add SIG-06 golden cross detector"
 ## Task 10: SIG-07 Support Bounce detector (TDD)
 
 **Files:**
+
 - Create: `src/server/services/signals/detectors/support-bounce.ts`
 - Create: `src/server/services/signals/detectors/support-bounce.test.ts`
 
@@ -1069,12 +1011,7 @@ import { describe, it, expect } from 'vitest';
 import { detectSupportBounce } from './support-bounce';
 import type { PriceBar } from '../types';
 
-function mkBar(
-  close: number,
-  ma150: number,
-  ma200: number,
-  i: number,
-): PriceBar {
+function mkBar(close: number, ma150: number, ma200: number, i: number): PriceBar {
   return {
     date: `2026-03-${String(i + 1).padStart(2, '0')}`,
     close,
@@ -1089,11 +1026,7 @@ function mkBar(
 describe('detectSupportBounce (SIG-07)', () => {
   it('triggers when price touches MA150 from above and bounces ≥1.5%', () => {
     // Bar -2: well above; Bar -1: touches MA150 at 100.5 (within 1%); Bar 0: bounces to 102.5
-    const bars = [
-      mkBar(110, 100, 90, 0),
-      mkBar(100.5, 100, 90, 1),
-      mkBar(102.5, 100, 90, 2),
-    ];
+    const bars = [mkBar(110, 100, 90, 0), mkBar(100.5, 100, 90, 1), mkBar(102.5, 100, 90, 2)];
     const result = detectSupportBounce(bars);
     expect(result).not.toBeNull();
     expect(result!.signalType).toBe('SIG-07');
@@ -1101,11 +1034,7 @@ describe('detectSupportBounce (SIG-07)', () => {
   });
 
   it('does not trigger without a touch', () => {
-    const bars = [
-      mkBar(110, 100, 90, 0),
-      mkBar(109, 100, 90, 1),
-      mkBar(111, 100, 90, 2),
-    ];
+    const bars = [mkBar(110, 100, 90, 0), mkBar(109, 100, 90, 1), mkBar(111, 100, 90, 2)];
     expect(detectSupportBounce(bars)).toBeNull();
   });
 
@@ -1135,9 +1064,7 @@ export const TOUCH_PCT = 0.01;
 export const BOUNCE_PCT = 0.015;
 export const BOUNCE_LOOKBACK = 3;
 
-export function detectSupportBounce(
-  bars: PriceBar[],
-): DetectedSignal | null {
+export function detectSupportBounce(bars: PriceBar[]): DetectedSignal | null {
   if (bars.length < 2) return null;
   const n = bars.length;
   const last = bars[n - 1];
@@ -1180,11 +1107,13 @@ git commit -m "feat(signals): add SIG-07 support bounce detector"
 ## Task 11: Detector registry + volume-confirmation post-processing (TDD)
 
 **Files:**
+
 - Create: `src/server/services/signals/detectors/index.ts`
 - Create: `src/server/services/signals/detect-all.ts`
 - Create: `src/server/services/signals/detect-all.test.ts`
 
 `detect-all.ts` exports `detectAllSignals(bars: PriceBar[]): DetectedSignal[]` that:
+
 1. Runs every detector.
 2. For signals that are breakouts (SIG-02, SIG-04, SIG-05, SIG-06), applies volume confirmation — if confirmed, keeps original strength; if not, downgrades strength by one level and sets `downgraded: true`.
 3. Sets `volumeConfirmed` accordingly.
@@ -1209,11 +1138,7 @@ import { describe, it, expect } from 'vitest';
 import { detectAllSignals, downgradeStrength } from './detect-all';
 import type { PriceBar } from './types';
 
-function mkBar(
-  close: number,
-  i: number,
-  overrides: Partial<PriceBar> = {},
-): PriceBar {
+function mkBar(close: number, i: number, overrides: Partial<PriceBar> = {}): PriceBar {
   return {
     date: `2026-03-${String(i + 1).padStart(2, '0')}`,
     close,
@@ -1296,12 +1221,7 @@ import {
   detectSupportBounce,
 } from './detectors';
 
-const BREAKOUT_SIGNALS: ReadonlySet<SignalType> = new Set([
-  'SIG-02',
-  'SIG-04',
-  'SIG-05',
-  'SIG-06',
-]);
+const BREAKOUT_SIGNALS: ReadonlySet<SignalType> = new Set(['SIG-02', 'SIG-04', 'SIG-05', 'SIG-06']);
 
 export function downgradeStrength(s: SignalStrength): SignalStrength {
   if (s === 'very_strong') return 'strong';
@@ -1354,6 +1274,7 @@ git commit -m "feat(signals): add detector registry with volume-confirmation pos
 ## Task 12: Composite signal score (pure, TDD)
 
 **Files:**
+
 - Create: `src/server/services/signals/composite-score.ts`
 - Create: `src/server/services/signals/composite-score.test.ts`
 
@@ -1426,9 +1347,7 @@ export function computeSignalScore(
 ): number | null {
   if (fundamentalScore === null) return null;
   return (
-    fundamentalScore * 0.5 +
-    strengthValue(strength) * 0.3 +
-    volumeValue(volumeConfirmed) * 0.2
+    fundamentalScore * 0.5 + strengthValue(strength) * 0.3 + volumeValue(volumeConfirmed) * 0.2
   );
 }
 ```
@@ -1447,9 +1366,11 @@ git commit -m "feat(signals): add composite signal score formula"
 ## Task 13: Ingestion orchestrator
 
 **Files:**
+
 - Create: `src/server/services/signals/ingestion.ts`
 
 Flow:
+
 1. Accept a `tickers: string[]` list (or fetch full universe).
 2. For each ticker:
    - Load stock row + latest fundamentals row + last ~220 daily_prices rows (chronological).
@@ -1465,12 +1386,7 @@ Flow:
 ```typescript
 import { and, desc, eq, inArray, sql } from 'drizzle-orm';
 import { db } from '@/server/db';
-import {
-  stocks,
-  dailyPrices,
-  fundamentals,
-  signals,
-} from '@/server/db/schema';
+import { stocks, dailyPrices, fundamentals, signals } from '@/server/db/schema';
 import { detectAllSignals } from './detect-all';
 import { isEligible } from './eligibility';
 import { computeSignalScore } from './composite-score';
@@ -1526,9 +1442,7 @@ export async function ingestSignalsForTickers(
         .orderBy(desc(fundamentals.quarter))
         .limit(1);
 
-      const fundamentalScore = latestFund
-        ? toNumber(latestFund.fundamentalScore)
-        : null;
+      const fundamentalScore = latestFund ? toNumber(latestFund.fundamentalScore) : null;
 
       // recent prices (chronological)
       const priceRows = await db
@@ -1596,15 +1510,10 @@ export async function ingestSignalsForTickers(
       const detected = detectAllSignals(bars);
       if (detected.length === 0) continue;
 
-      const toStr = (n: number | null): string | null =>
-        n === null ? null : String(n);
+      const toStr = (n: number | null): string | null => (n === null ? null : String(n));
 
       for (const sig of detected) {
-        const score = computeSignalScore(
-          fundamentalScore,
-          sig.strength,
-          sig.volumeConfirmed,
-        );
+        const score = computeSignalScore(fundamentalScore, sig.strength, sig.volumeConfirmed);
         await db
           .insert(signals)
           .values({
@@ -1654,6 +1563,7 @@ git commit -m "feat(signals): add ingestion orchestrator with eligibility + upse
 ## Task 14: CLI + barrel + npm script + docs + verification + push
 
 **Files:**
+
 - Create: `src/server/services/signals/cli.ts`
 - Create: `src/server/services/signals/index.ts`
 - Modify: `package.json`
@@ -1716,6 +1626,7 @@ main()
 - [ ] **Step 3: Add npm script**
 
 In `package.json` `"scripts"`, after `"ingest:fundamentals"`:
+
 ```json
 "detect:signals": "tsx src/server/services/signals/cli.ts"
 ```
@@ -1723,11 +1634,13 @@ In `package.json` `"scripts"`, after `"ingest:fundamentals"`:
 - [ ] **Step 4: Update CLAUDE.md**
 
 Add to "Running Locally" block:
+
 ```
 pnpm detect:signals        # run signal detectors against stored prices+fundamentals
 ```
 
 Add to "Project Structure" under `services/`:
+
 ```
       signals/      eligibility, detectors, composite scoring, ingestion
 ```

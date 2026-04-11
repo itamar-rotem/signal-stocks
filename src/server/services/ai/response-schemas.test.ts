@@ -39,9 +39,7 @@ describe('InitialRationaleResponseSchema', () => {
   });
 
   it('rejects missing summary', () => {
-    expect(() =>
-      InitialRationaleResponseSchema.parse({ fundamentalThesis: 'x' }),
-    ).toThrow();
+    expect(() => InitialRationaleResponseSchema.parse({ fundamentalThesis: 'x' })).toThrow();
   });
 });
 
@@ -76,9 +74,9 @@ describe('parseInitialResponse', () => {
 
 describe('UpdateRationaleResponseSchema', () => {
   it('accepts an updateText-only object', () => {
-    expect(
-      UpdateRationaleResponseSchema.parse({ updateText: 'changed' }),
-    ).toEqual({ updateText: 'changed' });
+    expect(UpdateRationaleResponseSchema.parse({ updateText: 'changed' })).toEqual({
+      updateText: 'changed',
+    });
   });
 });
 

@@ -14,9 +14,7 @@ export const InitialRationaleResponseSchema = z
   })
   .passthrough();
 
-export type InitialRationaleResponse = z.infer<
-  typeof InitialRationaleResponseSchema
->;
+export type InitialRationaleResponse = z.infer<typeof InitialRationaleResponseSchema>;
 
 export const UpdateRationaleResponseSchema = z
   .object({
@@ -24,9 +22,7 @@ export const UpdateRationaleResponseSchema = z
   })
   .passthrough();
 
-export type UpdateRationaleResponse = z.infer<
-  typeof UpdateRationaleResponseSchema
->;
+export type UpdateRationaleResponse = z.infer<typeof UpdateRationaleResponseSchema>;
 
 /**
  * Strip markdown code fences (```json ... ``` or ``` ... ```) if present,

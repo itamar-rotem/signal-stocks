@@ -62,6 +62,7 @@ CLAUDE.md                             # document ai service
 ## Task 1: Install SDK + add env var + schema index
 
 **Files:**
+
 - Modify: `package.json`
 - Modify: `src/lib/env.ts`
 - Modify: `src/server/db/schema/signals.ts`
@@ -76,11 +77,13 @@ pnpm add @anthropic-ai/sdk
 - [ ] **Step 2: Add env var in `src/lib/env.ts`**
 
 Add to `server` block after `FMP_API_KEY`:
+
 ```typescript
 ANTHROPIC_API_KEY: z.string().min(1).default('missing-anthropic-key'),
 ```
 
 Add to `runtimeEnv`:
+
 ```typescript
 ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY,
 ```
@@ -129,6 +132,7 @@ git commit -m "chore(ai): install @anthropic-ai/sdk, add env var, unique index o
 ## Task 2: Types (TDD)
 
 **Files:**
+
 - Create: `src/server/services/ai/types.ts`
 - Create: `src/server/services/ai/types.test.ts`
 
@@ -242,6 +246,7 @@ git commit -m "feat(ai): add Rationale / RationaleInput / Confidence types"
 ## Task 3: Disclaimer constants (TDD)
 
 **Files:**
+
 - Create: `src/server/services/ai/disclaimer.ts`
 - Create: `src/server/services/ai/disclaimer.test.ts`
 
@@ -300,6 +305,7 @@ git commit -m "feat(ai): add canonical rationale disclaimer constant + enforcer"
 ## Task 4: Confidence derivation (TDD)
 
 **Files:**
+
 - Create: `src/server/services/ai/confidence.ts`
 - Create: `src/server/services/ai/confidence.test.ts`
 
@@ -358,12 +364,7 @@ export function deriveConfidence(
   fundamentalScore: number | null,
 ): Confidence {
   if (signalScore === null || signalScore < 60) return 'Low';
-  if (
-    signalScore >= 80 &&
-    volumeConfirmed &&
-    fundamentalScore !== null &&
-    fundamentalScore >= 70
-  ) {
+  if (signalScore >= 80 && volumeConfirmed && fundamentalScore !== null && fundamentalScore >= 70) {
     return 'High';
   }
   return 'Medium';
@@ -384,10 +385,12 @@ git commit -m "feat(ai): add confidence derivation from signal/volume/fundamenta
 ## Task 5: Prompt builders (TDD)
 
 **Files:**
+
 - Create: `src/server/services/ai/prompts.ts`
 - Create: `src/server/services/ai/prompts.test.ts`
 
 Exports:
+
 - `buildInitialPrompt(input: RationaleInput): { system: string; user: string }`
 - `buildUpdatePrompt(input: StateTransitionInput): { system: string; user: string }`
 
@@ -587,6 +590,7 @@ git commit -m "feat(ai): add initial and update prompt builders"
 ## Task 6: Response schemas (TDD)
 
 **Files:**
+
 - Create: `src/server/services/ai/response-schemas.ts`
 - Create: `src/server/services/ai/response-schemas.test.ts`
 
@@ -594,7 +598,7 @@ Zod schemas for the JSON the model returns. Use `.passthrough()` so unexpected e
 
 - [ ] **Step 1: Failing test**
 
-```typescript
+````typescript
 import { describe, it, expect } from 'vitest';
 import {
   InitialRationaleResponseSchema,
@@ -636,9 +640,7 @@ describe('InitialRationaleResponseSchema', () => {
   });
 
   it('rejects missing summary', () => {
-    expect(() =>
-      InitialRationaleResponseSchema.parse({ fundamentalThesis: 'x' }),
-    ).toThrow();
+    expect(() => InitialRationaleResponseSchema.parse({ fundamentalThesis: 'x' })).toThrow();
   });
 });
 
@@ -673,9 +675,9 @@ describe('parseInitialResponse', () => {
 
 describe('UpdateRationaleResponseSchema', () => {
   it('accepts an updateText-only object', () => {
-    expect(
-      UpdateRationaleResponseSchema.parse({ updateText: 'changed' }),
-    ).toEqual({ updateText: 'changed' });
+    expect(UpdateRationaleResponseSchema.parse({ updateText: 'changed' })).toEqual({
+      updateText: 'changed',
+    });
   });
 });
 
@@ -686,13 +688,13 @@ describe('parseUpdateResponse', () => {
     });
   });
 });
-```
+````
 
 - [ ] **Step 2: Run — expect FAIL**
 
 - [ ] **Step 3: Implement**
 
-```typescript
+````typescript
 import { z } from 'zod';
 
 export const InitialRationaleResponseSchema = z
@@ -709,9 +711,7 @@ export const InitialRationaleResponseSchema = z
   })
   .passthrough();
 
-export type InitialRationaleResponse = z.infer<
-  typeof InitialRationaleResponseSchema
->;
+export type InitialRationaleResponse = z.infer<typeof InitialRationaleResponseSchema>;
 
 export const UpdateRationaleResponseSchema = z
   .object({
@@ -719,9 +719,7 @@ export const UpdateRationaleResponseSchema = z
   })
   .passthrough();
 
-export type UpdateRationaleResponse = z.infer<
-  typeof UpdateRationaleResponseSchema
->;
+export type UpdateRationaleResponse = z.infer<typeof UpdateRationaleResponseSchema>;
 
 /**
  * Strip markdown code fences (```json ... ``` or ``` ... ```) if present,
@@ -743,7 +741,7 @@ export function parseUpdateResponse(text: string): UpdateRationaleResponse {
   const json = JSON.parse(stripCodeFences(text));
   return UpdateRationaleResponseSchema.parse(json);
 }
-```
+````
 
 - [ ] **Step 4: Run — expect 8 PASS**
 
@@ -759,6 +757,7 @@ git commit -m "feat(ai): add zod schemas for model JSON output with code-fence h
 ## Task 7: Anthropic client wrapper
 
 **Files:**
+
 - Create: `src/server/services/ai/anthropic-client.ts`
 
 No test for the client itself — mirrors Phase 3 FMP client (which also has no direct test; covered via integration).
@@ -812,8 +811,7 @@ export class AnthropicRationaleClient implements RationaleProvider {
         messages: [{ role: 'user', content: user }],
       });
     } catch (err) {
-      const status =
-        err instanceof Anthropic.APIError ? err.status : undefined;
+      const status = err instanceof Anthropic.APIError ? err.status : undefined;
       throw new RationaleApiError(
         `Anthropic API call failed: ${err instanceof Error ? err.message : String(err)}`,
         status,
@@ -822,9 +820,7 @@ export class AnthropicRationaleClient implements RationaleProvider {
 
     const first = response.content[0];
     if (!first || first.type !== 'text') {
-      throw new RationaleApiError(
-        `Expected text content block, got ${first?.type ?? 'none'}`,
-      );
+      throw new RationaleApiError(`Expected text content block, got ${first?.type ?? 'none'}`);
     }
     return first.text;
   }
@@ -849,10 +845,12 @@ git commit -m "feat(ai): add Anthropic client wrapper implementing RationaleProv
 ## Task 8: Generation orchestrator (TDD with stub provider)
 
 **Files:**
+
 - Create: `src/server/services/ai/generation.ts`
 - Create: `src/server/services/ai/generation.test.ts`
 
 Exports:
+
 - `generateInitialRationale(input: RationaleInput, provider: RationaleProvider, confidenceOverride?: Confidence): Promise<Rationale>`
 - `generateUpdateRationale(input: StateTransitionInput, provider: RationaleProvider): Promise<StateUpdateRationale>`
 
@@ -1050,6 +1048,7 @@ git commit -m "feat(ai): add generation orchestrator with stub-testable provider
 ## Task 9: Persistence
 
 **Files:**
+
 - Create: `src/server/services/ai/persistence.ts`
 
 Exports: `upsertRationale(signalId: number, rationale: Rationale): Promise<void>`.
@@ -1062,13 +1061,9 @@ import { db } from '@/server/db';
 import { signalRationales } from '@/server/db/schema';
 import type { Rationale } from './types';
 
-const toStr = (n: number | null): string | null =>
-  n === null ? null : String(n);
+const toStr = (n: number | null): string | null => (n === null ? null : String(n));
 
-export async function upsertRationale(
-  signalId: number,
-  rationale: Rationale,
-): Promise<void> {
+export async function upsertRationale(signalId: number, rationale: Rationale): Promise<void> {
   await db
     .insert(signalRationales)
     .values({
@@ -1115,6 +1110,7 @@ git commit -m "feat(ai): add upsertRationale persistence helper"
 ## Task 10: CLI + barrel + script + docs + verification + push
 
 **Files:**
+
 - Create: `src/server/services/ai/cli.ts`
 - Create: `src/server/services/ai/index.ts`
 - Modify: `package.json`
@@ -1140,13 +1136,7 @@ export * from './persistence';
 ```typescript
 import { desc, eq, isNull } from 'drizzle-orm';
 import { db } from '@/server/db';
-import {
-  stocks,
-  signals,
-  signalRationales,
-  fundamentals,
-  dailyPrices,
-} from '@/server/db/schema';
+import { stocks, signals, signalRationales, fundamentals, dailyPrices } from '@/server/db/schema';
 import { AnthropicRationaleClient } from './anthropic-client';
 import { generateInitialRationale } from './generation';
 import { upsertRationale } from './persistence';
@@ -1161,7 +1151,10 @@ function toNumber(value: string | null): number | null {
 }
 
 async function main() {
-  const argIds = process.argv.slice(2).map((s) => Number(s)).filter((n) => !Number.isNaN(n));
+  const argIds = process.argv
+    .slice(2)
+    .map((s) => Number(s))
+    .filter((n) => !Number.isNaN(n));
 
   // Load signals needing rationale.
   const rows = await db
@@ -1259,7 +1252,9 @@ async function main() {
 
       const rationale = await generateInitialRationale(input, provider);
       await upsertRationale(t.signalId, rationale);
-      console.log(`  ${t.ticker.padEnd(8)} signal=${t.signalId} confidence=${rationale.confidence}`);
+      console.log(
+        `  ${t.ticker.padEnd(8)} signal=${t.signalId} confidence=${rationale.confidence}`,
+      );
       ok++;
     } catch (err) {
       errors.push({
@@ -1288,6 +1283,7 @@ main()
 - [ ] **Step 3: Add npm script**
 
 In `package.json` after `detect:signals`:
+
 ```json
 "generate:rationale": "tsx src/server/services/ai/cli.ts"
 ```
@@ -1295,11 +1291,13 @@ In `package.json` after `detect:signals`:
 - [ ] **Step 4: Update CLAUDE.md**
 
 Add to "Running Locally" after `pnpm detect:signals`:
+
 ```
 pnpm generate:rationale    # generate AI rationale for signals (needs ANTHROPIC_API_KEY)
 ```
 
 Add to "Project Structure" under `services/`:
+
 ```
       ai/           Claude client, prompts, rationale generation, persistence
 ```

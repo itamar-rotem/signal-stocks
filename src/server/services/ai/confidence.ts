@@ -10,12 +10,7 @@ export function deriveConfidence(
   fundamentalScore: number | null,
 ): Confidence {
   if (signalScore === null || signalScore < 60) return 'Low';
-  if (
-    signalScore >= 80 &&
-    volumeConfirmed &&
-    fundamentalScore !== null &&
-    fundamentalScore >= 70
-  ) {
+  if (signalScore >= 80 && volumeConfirmed && fundamentalScore !== null && fundamentalScore >= 70) {
     return 'High';
   }
   return 'Medium';
