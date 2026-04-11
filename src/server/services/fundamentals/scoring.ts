@@ -47,10 +47,7 @@ function averagePresent(scores: (number | null)[]): number | null {
  * Profitability (30% of composite): margins + returns.
  * Higher is better for all six metrics.
  */
-export function scoreProfitability(
-  metrics: FundamentalMetrics,
-  peers: PeerMetrics,
-): number | null {
+export function scoreProfitability(metrics: FundamentalMetrics, peers: PeerMetrics): number | null {
   const scores = [
     percentileRank(metrics.grossMargin, peers.grossMargin),
     percentileRank(metrics.operatingMargin, peers.operatingMargin),
@@ -66,10 +63,7 @@ export function scoreProfitability(
  * Growth (25% of composite): revenue + EPS growth.
  * Higher is better.
  */
-export function scoreGrowth(
-  metrics: FundamentalMetrics,
-  peers: PeerMetrics,
-): number | null {
+export function scoreGrowth(metrics: FundamentalMetrics, peers: PeerMetrics): number | null {
   const scores = [
     percentileRank(metrics.revenueGrowthYoy, peers.revenueGrowthYoy),
     percentileRank(metrics.epsGrowth, peers.epsGrowth),
@@ -101,10 +95,7 @@ export function scoreFinancialHealth(
  * Valuation (20% of composite): P/E, PEG, EV/EBITDA.
  * All three are lowerIsBetter.
  */
-export function scoreValuation(
-  metrics: FundamentalMetrics,
-  peers: PeerMetrics,
-): number | null {
+export function scoreValuation(metrics: FundamentalMetrics, peers: PeerMetrics): number | null {
   const scores = [
     percentileRank(metrics.forwardPe, peers.forwardPe, { lowerIsBetter: true }),
     percentileRank(metrics.pegRatio, peers.pegRatio, { lowerIsBetter: true }),
