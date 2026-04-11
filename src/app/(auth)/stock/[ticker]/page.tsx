@@ -11,6 +11,7 @@ import { SiteNav } from '@/components/layout/site-nav';
 import { TRPCProvider } from '@/trpc/client';
 import { db } from '@/server/db';
 import { signalRationales } from '@/server/db/schema';
+import { StockChart } from '@/components/charts/stock-chart';
 
 export const dynamic = 'force-dynamic';
 
@@ -29,6 +30,8 @@ export default async function StockDetailPage({ params }: PageProps) {
   const data = await trpc.signals.byTicker({ ticker });
 
   if (!data) notFound();
+
+  const priceHistory = await trpc.signals.priceHistory({ ticker, days: 260 });
 
   const freshest = data.signals[0];
   const [fullRationale] = freshest
@@ -52,6 +55,21 @@ export default async function StockDetailPage({ params }: PageProps) {
             <p className="text-muted-foreground mt-1 text-sm">{data.stock.sector}</p>
           )}
         </header>
+
+        {priceHistory && priceHistory.bars.length > 0 && (
+          <Card>
+            <CardHeader>
+              <CardTitle>Price History</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <StockChart
+                bars={priceHistory.bars}
+                ma200Series={priceHistory.ma200Series}
+                markers={priceHistory.markers}
+              />
+            </CardContent>
+          </Card>
+        )}
 
         {fullRationale && (
           <RationaleCard
