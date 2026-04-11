@@ -83,7 +83,7 @@ export default function DemoSignalsPage() {
               name={s.stock.name}
               signal={signalTypeLabel(s.signalType)}
               strength={s.strength}
-              price={s.stock.lastPrice}
+              price={s.stock.lastPrice ?? 0}
               state={s.recommendation?.state ?? 'HOLD'}
               triggeredAt={s.triggeredAt}
               href={`/demo/stock/${s.stock.ticker}`}
@@ -104,9 +104,9 @@ export default function DemoSignalsPage() {
                 name={s.stock.name}
                 sector={s.stock.sector}
                 why={detail?.rationale.summary ?? s.rationale?.summary ?? ''}
-                entryPrice={s.stock.lastPrice}
-                targetPrice={s.recommendation?.targetPrice ?? s.stock.lastPrice * 1.18}
-                stopLoss={s.recommendation?.stopLoss ?? s.stock.lastPrice * 0.92}
+                entryPrice={s.stock.lastPrice ?? 0}
+                targetPrice={s.recommendation?.targetPrice ?? (s.stock.lastPrice ?? 0) * 1.18}
+                stopLoss={s.recommendation?.stopLoss ?? (s.stock.lastPrice ?? 0) * 0.92}
                 confidence={s.rationale?.confidence ?? detail?.rationale.confidence ?? 'Medium'}
                 signalType={signalTypeLabel(s.signalType)}
                 state={s.recommendation?.state ?? 'HOLD'}
