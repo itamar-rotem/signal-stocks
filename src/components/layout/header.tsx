@@ -9,28 +9,44 @@ export function Header() {
   const { isSignedIn } = useAuth();
 
   return (
-    <header className="border-b">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4">
-        <Link href="/" className="flex items-center gap-2 text-lg font-bold tracking-tight">
+    <header className="sticky top-0 z-40 border-b border-border bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4">
+        <Link
+          href="/"
+          className="flex items-center gap-2 font-mono text-sm font-bold tracking-widest uppercase"
+        >
           <Logo size="md" />
-          <span>Lodestar</span>
+          <span>LODESTAR</span>
         </Link>
-        <nav className="flex items-center gap-4">
+        <nav className="flex items-center gap-3">
           {!isSignedIn ? (
             <>
               <Link href="/sign-in">
-                <Button variant="ghost" size="sm">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="font-mono text-xs uppercase tracking-wider"
+                >
                   Sign in
                 </Button>
               </Link>
               <Link href="/sign-up">
-                <Button size="sm">Sign up</Button>
+                <Button
+                  size="sm"
+                  className="font-mono text-xs uppercase tracking-wider"
+                >
+                  Sign up
+                </Button>
               </Link>
             </>
           ) : (
             <>
               <Link href="/dashboard">
-                <Button variant="ghost" size="sm">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="font-mono text-xs uppercase tracking-wider"
+                >
                   Dashboard
                 </Button>
               </Link>

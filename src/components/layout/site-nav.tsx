@@ -5,16 +5,16 @@ import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 
 const TABS = [
-  { href: '/dashboard/signals', label: 'Signals' },
-  { href: '/dashboard/watchlist', label: 'Watchlist' },
-  { href: '/dashboard/trades', label: 'Trades' },
+  { href: '/dashboard/signals', label: 'SIGNALS' },
+  { href: '/dashboard/watchlist', label: 'WATCHLIST' },
+  { href: '/dashboard/trades', label: 'TRADES' },
 ] as const;
 
 export function SiteNav() {
   const pathname = usePathname();
   return (
-    <nav className="border-b">
-      <div className="mx-auto flex max-w-7xl gap-6 px-4">
+    <nav className="border-b border-border">
+      <div className="mx-auto flex max-w-7xl gap-1 px-4">
         {TABS.map((tab) => {
           const active = pathname === tab.href;
           return (
@@ -22,10 +22,10 @@ export function SiteNav() {
               key={tab.href}
               href={tab.href}
               className={cn(
-                'border-b-2 px-1 py-3 text-sm font-medium transition-colors',
+                'border-b-2 px-3 py-2.5 font-mono text-[11px] tracking-widest transition-colors uppercase',
                 active
                   ? 'border-primary text-foreground'
-                  : 'text-muted-foreground hover:text-foreground border-transparent',
+                  : 'border-transparent text-muted-foreground hover:text-foreground hover:border-primary/40',
               )}
             >
               {tab.label}

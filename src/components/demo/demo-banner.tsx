@@ -1,8 +1,8 @@
 export function DemoBanner() {
   return (
-    <div className="border-b border-amber-500/30 bg-amber-500/10 px-4 py-2 text-center text-xs text-amber-700 dark:text-amber-300">
-      <strong>Demo mode</strong> — you&rsquo;re browsing synthetic fixture data for UI preview.
-      Nothing here is real market data or investment advice.
+    <div className="border-b border-severity-high/40 bg-severity-high/10 px-4 py-1.5 text-center font-mono text-[11px] tracking-widest text-severity-high">
+      [ DEMO MODE ] &mdash; SYNTHETIC FIXTURE DATA &middot; NOT REAL MARKET DATA &middot; NOT
+      INVESTMENT ADVICE
     </div>
   );
 }
