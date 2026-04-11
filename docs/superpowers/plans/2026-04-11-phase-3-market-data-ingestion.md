@@ -405,9 +405,7 @@ export function parseFmpHistorical(raw: unknown): FmpHistoricalResponse {
   const parsed = FmpHistoricalResponseSchema.parse(raw);
   return {
     symbol: parsed.symbol,
-    historical: [...parsed.historical].sort((a, b) =>
-      a.date.localeCompare(b.date),
-    ),
+    historical: [...parsed.historical].sort((a, b) => a.date.localeCompare(b.date)),
   };
 }
 ```
@@ -491,10 +489,7 @@ export class FmpClient implements MarketDataProvider {
     }
 
     if (!response.ok) {
-      throw new FmpApiError(
-        `FMP returned ${response.status} for ${ticker}`,
-        response.status,
-      );
+      throw new FmpApiError(`FMP returned ${response.status} for ${ticker}`, response.status);
     }
 
     const json: unknown = await response.json();
@@ -655,10 +650,7 @@ Create `src/server/services/market-data/moving-averages.ts`:
  * @param closes - series of close prices in chronological (ascending) order
  * @param window - window size (e.g. 150, 200)
  */
-export function computeSMA(
-  closes: number[],
-  window: number,
-): (number | null)[] {
+export function computeSMA(closes: number[], window: number): (number | null)[] {
   if (window <= 0) {
     throw new Error(`computeSMA: window must be positive, got ${window}`);
   }
@@ -688,10 +680,7 @@ export function computeSMA(
  * @param series - values in chronological order; may contain nulls
  * @param lookback - number of periods to look back (e.g. 5 for a 5-day slope)
  */
-export function computeSlope(
-  series: (number | null)[],
-  lookback: number,
-): (number | null)[] {
+export function computeSlope(series: (number | null)[], lookback: number): (number | null)[] {
   if (lookback <= 0) {
     throw new Error(`computeSlope: lookback must be positive, got ${lookback}`);
   }
@@ -812,10 +801,7 @@ describe('fmpHistoricalToDbRows', () => {
   });
 
   it('returns empty array for empty historical', () => {
-    const rows = fmpHistoricalToDbRows(
-      { symbol: 'TEST', historical: [] },
-      42,
-    );
+    const rows = fmpHistoricalToDbRows({ symbol: 'TEST', historical: [] }, 42);
     expect(rows).toEqual([]);
   });
 
@@ -1024,7 +1010,7 @@ export async function ingestPricesForTickers(
 }
 ```
 
-**IMPORTANT — verify the `onConflictDoUpdate` set clause.** Drizzle 0.45 expects `sql\`excluded.column_name\`` references inside `set` for upserts that use the incoming row's value. If passing the column object as shown doesn't work (it becomes an unintended no-op or syntax error), replace with:
+**IMPORTANT — verify the `onConflictDoUpdate` set clause.** Drizzle 0.45 expects `sql\`excluded.column_name\``references inside`set` for upserts that use the incoming row's value. If passing the column object as shown doesn't work (it becomes an unintended no-op or syntax error), replace with:
 
 ```typescript
 import { sql } from 'drizzle-orm';
@@ -1050,7 +1036,7 @@ Decide which form to use by consulting `node_modules/drizzle-orm/pg-core/query-b
 pnpm tsc --noEmit
 ```
 
-Expected: clean. If the `onConflictDoUpdate` set clause errors, switch to the `sql\`excluded.*\`` form above and re-check.
+Expected: clean. If the `onConflictDoUpdate` set clause errors, switch to the `sql\`excluded.\*\`` form above and re-check.
 
 - [ ] **Step 3: Commit**
 
