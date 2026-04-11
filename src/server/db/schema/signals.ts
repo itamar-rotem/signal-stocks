@@ -45,23 +45,29 @@ export const signals = pgTable(
   }),
 );
 
-export const signalRationales = pgTable('signal_rationales', {
-  id: serial('id').primaryKey(),
-  signalId: integer('signal_id')
-    .notNull()
-    .references(() => signals.id, { onDelete: 'cascade' }),
-  summary: text('summary').notNull(),
-  fundamentalThesis: text('fundamental_thesis'),
-  technicalContext: text('technical_context'),
-  targetPrice: numeric('target_price', { precision: 12, scale: 4 }),
-  stopLoss: numeric('stop_loss', { precision: 12, scale: 4 }),
-  riskReward: numeric('risk_reward', { precision: 6, scale: 2 }),
-  confidence: confidenceEnum('confidence'),
-  strategyNote: text('strategy_note'),
-  disclaimer: text('disclaimer').notNull(),
-  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
-  updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
-});
+export const signalRationales = pgTable(
+  'signal_rationales',
+  {
+    id: serial('id').primaryKey(),
+    signalId: integer('signal_id')
+      .notNull()
+      .references(() => signals.id, { onDelete: 'cascade' }),
+    summary: text('summary').notNull(),
+    fundamentalThesis: text('fundamental_thesis'),
+    technicalContext: text('technical_context'),
+    targetPrice: numeric('target_price', { precision: 12, scale: 4 }),
+    stopLoss: numeric('stop_loss', { precision: 12, scale: 4 }),
+    riskReward: numeric('risk_reward', { precision: 6, scale: 2 }),
+    confidence: confidenceEnum('confidence'),
+    strategyNote: text('strategy_note'),
+    disclaimer: text('disclaimer').notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => ({
+    signalIdIdx: uniqueIndex('signal_rationales_signal_id_idx').on(table.signalId),
+  }),
+);
 
 export const signalRecommendations = pgTable(
   'signal_recommendations',

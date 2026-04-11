@@ -1,0 +1,1 @@
+CREATE UNIQUE INDEX "signal_rationales_signal_id_idx" ON "signal_rationales" USING btree ("signal_id");
