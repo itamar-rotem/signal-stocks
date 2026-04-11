@@ -38,24 +38,24 @@ export function AlertRow({
       data-ticker={ticker}
       className={cn(
         'group flex items-center gap-3 px-4 py-3 transition-colors',
-        'hover:bg-secondary/50 hover:border-l-2 hover:border-l-primary',
+        'hover:bg-secondary/50 hover:border-l-primary hover:border-l-2',
         'border-l-2 border-l-transparent',
       )}
     >
       <SeverityDot severity={severity} />
 
-      <div className="min-w-0 flex-1 grid grid-cols-[auto_1fr_auto_auto_auto_auto_auto] items-center gap-x-4 gap-y-1">
+      <div className="grid min-w-0 flex-1 grid-cols-[auto_1fr_auto_auto_auto_auto_auto] items-center gap-x-4 gap-y-1">
         {/* ticker + name */}
-        <div className="flex flex-col min-w-[80px]">
+        <div className="flex min-w-[80px] flex-col">
           <span className="font-mono text-sm font-semibold tracking-wide">{ticker}</span>
           <span className="text-muted-foreground truncate text-xs">{name}</span>
         </div>
 
         {/* signal label */}
-        <span className="font-mono text-xs text-muted-foreground truncate">{signal}</span>
+        <span className="text-muted-foreground truncate font-mono text-xs">{signal}</span>
 
         {/* strength */}
-        <span className="font-mono text-xs text-muted-foreground/80 hidden sm:block whitespace-nowrap">
+        <span className="text-muted-foreground/80 hidden font-mono text-xs whitespace-nowrap sm:block">
           {strength.replace('_', ' ')}
         </span>
 
@@ -66,12 +66,12 @@ export function AlertRow({
         <StatusPill status={validState} />
 
         {/* relative time */}
-        <span className="font-mono text-xs text-muted-foreground/60 hidden md:block whitespace-nowrap">
+        <span className="text-muted-foreground/60 hidden font-mono text-xs whitespace-nowrap md:block">
           {fmtRelTime(triggeredAt)}
         </span>
 
         {/* chevron */}
-        <ChevronRight className="h-4 w-4 text-muted-foreground/40 group-hover:text-primary transition-colors flex-shrink-0" />
+        <ChevronRight className="text-muted-foreground/40 group-hover:text-primary h-4 w-4 flex-shrink-0 transition-colors" />
       </div>
     </Link>
   );

@@ -67,6 +67,7 @@ src/server/db/schema/stocks.ts       # daily_prices needs high/low already prese
 ## Task 1: Types (TDD)
 
 **Files:**
+
 - Create: `src/server/services/recommendations/types.ts`
 - Create: `src/server/services/recommendations/types.test.ts`
 
@@ -74,11 +75,7 @@ src/server/db/schema/stocks.ts       # daily_prices needs high/low already prese
 
 ```typescript
 import { describe, it, expect } from 'vitest';
-import type {
-  RecommendationState,
-  EvaluationContext,
-  Decision,
-} from './types';
+import type { RecommendationState, EvaluationContext, Decision } from './types';
 
 describe('recommendation types', () => {
   it('RecommendationState union', () => {
@@ -191,6 +188,7 @@ git commit -m "feat(recommendations): add state + EvaluationContext + Decision t
 ## Task 2: Target & stop initializer (TDD)
 
 **Files:**
+
 - Create: `src/server/services/recommendations/targets.ts`
 - Create: `src/server/services/recommendations/targets.test.ts`
 
@@ -249,10 +247,7 @@ describe('initialStopLoss', () => {
  * upsidePct = max(5%, score/100 × 20%)
  * target    = entry × (1 + upsidePct)
  */
-export function initialTarget(
-  entryPrice: number,
-  signalScore: number | null,
-): number | null {
+export function initialTarget(entryPrice: number, signalScore: number | null): number | null {
   if (signalScore === null) return null;
   const raw = (signalScore / 100) * 0.2;
   const upsidePct = Math.max(0.05, raw);
@@ -293,6 +288,7 @@ git commit -m "feat(recommendations): add initial target and stop loss heuristic
 ## Task 3: ATR calculation (TDD)
 
 **Files:**
+
 - Create: `src/server/services/recommendations/atr.ts`
 - Create: `src/server/services/recommendations/atr.test.ts`
 
@@ -318,9 +314,7 @@ describe('compute14DayATR', () => {
   });
 
   it('returns a positive ATR for a volatile series', () => {
-    const bars = Array.from({ length: 20 }, (_, i) =>
-      bar(100 + i, 90 + i, 95 + i, i),
-    );
+    const bars = Array.from({ length: 20 }, (_, i) => bar(100 + i, 90 + i, 95 + i, i));
     const atr = compute14DayATR(bars);
     expect(atr).not.toBeNull();
     expect(atr!).toBeGreaterThan(0);
@@ -381,10 +375,12 @@ git commit -m "feat(recommendations): add 14-day ATR computation"
 ## Task 4: Trailing stop (TDD)
 
 **Files:**
+
 - Create: `src/server/services/recommendations/trailing-stop.ts`
 - Create: `src/server/services/recommendations/trailing-stop.test.ts`
 
 Per spec 5.2: trailing stop = max of
+
 - breakeven trail (entry) if gain ≥ 5%
 - profit-lock trail (entry × 1.05) if gain ≥ 10%
 - ATR trail (highest close since entry − 2 × ATR)
@@ -493,8 +489,7 @@ const PROFIT_LOCK_OFFSET = 0.05;
 const ATR_MULTIPLIER = 2;
 
 export function computeTrailingStop(input: TrailingStopInput): number {
-  const { entryPrice, currentPrice, highestCloseSinceEntry, atr14, currentStopLoss } =
-    input;
+  const { entryPrice, currentPrice, highestCloseSinceEntry, atr14, currentStopLoss } = input;
   const gainPct = (currentPrice - entryPrice) / entryPrice;
 
   const candidates: number[] = [];
@@ -533,6 +528,7 @@ git commit -m "feat(recommendations): add dynamic trailing stop with breakeven/p
 ## Task 5: Initial state deriver (TDD)
 
 **Files:**
+
 - Create: `src/server/services/recommendations/initial-state.ts`
 - Create: `src/server/services/recommendations/initial-state.test.ts`
 
@@ -593,6 +589,7 @@ git commit -m "feat(recommendations): add initial state deriver from strength + 
 ## Task 6: Pure FSM (TDD)
 
 **Files:**
+
 - Create: `src/server/services/recommendations/state-machine.ts`
 - Create: `src/server/services/recommendations/state-machine.test.ts`
 
@@ -841,10 +838,7 @@ function transition(
   } as Decision;
 }
 
-export function evaluateTransition(
-  current: RecommendationState,
-  ctx: EvaluationContext,
-): Decision {
+export function evaluateTransition(current: RecommendationState, ctx: EvaluationContext): Decision {
   if (TERMINAL_STATES.has(current)) return { kind: 'no_change' };
 
   switch (current) {
@@ -907,11 +901,7 @@ export function evaluateTransition(
       if (hitStop(ctx)) {
         return transition('STOP_HIT', 'Stop hit while downgraded');
       }
-      if (
-        ctx.fundamentalScore !== null &&
-        ctx.fundamentalScore >= 60 &&
-        priceReclaimedMa(ctx)
-      ) {
+      if (ctx.fundamentalScore !== null && ctx.fundamentalScore >= 60 && priceReclaimedMa(ctx)) {
         return transition('HOLD', 'Fundamentals recovered and price reclaimed MA');
       }
       if (ctx.daysInState > WATCH_EXPIRY_DAYS) {
@@ -940,6 +930,7 @@ git commit -m "feat(recommendations): add pure FSM with all transition rules"
 ## Task 7: Schema change + migration
 
 **Files:**
+
 - Modify: `src/server/db/schema/signals.ts`
 - Create: `drizzle/000N_*.sql`
 
@@ -979,9 +970,11 @@ git commit -m "feat(db): add unique index on signal_recommendations.signal_id"
 ## Task 8: Persistence
 
 **Files:**
+
 - Create: `src/server/services/recommendations/persistence.ts`
 
 Exports:
+
 - `upsertRecommendation(signalId, decision, prevState, state, target, stopLoss, trailingStop)`
 - `appendStateLog(signalId, fromState, toState, reason)`
 - `writeOutcomeIfTerminal(signalId, decision, entryPrice, currentPrice, daysHeld)` — writes to `signal_outcomes` only for SELL / STOP_HIT / EXPIRED.
@@ -989,16 +982,11 @@ Exports:
 ```typescript
 import { sql } from 'drizzle-orm';
 import { db } from '@/server/db';
-import {
-  signalRecommendations,
-  signalStateLog,
-  signalOutcomes,
-} from '@/server/db/schema';
+import { signalRecommendations, signalStateLog, signalOutcomes } from '@/server/db/schema';
 import type { RecommendationState, Decision } from './types';
 import { TERMINAL_STATES } from './types';
 
-const toStr = (n: number | null): string | null =>
-  n === null ? null : String(n);
+const toStr = (n: number | null): string | null => (n === null ? null : String(n));
 
 export async function upsertRecommendation(params: {
   signalId: number;
@@ -1008,8 +996,7 @@ export async function upsertRecommendation(params: {
   stopLoss: number | null;
   trailingStop: number | null;
 }): Promise<void> {
-  const { signalId, state, previousState, targetPrice, stopLoss, trailingStop } =
-    params;
+  const { signalId, state, previousState, targetPrice, stopLoss, trailingStop } = params;
   await db
     .insert(signalRecommendations)
     .values({
@@ -1064,8 +1051,7 @@ export async function writeOutcomeIfTerminal(params: {
         ? 'stopped_out'
         : 'expired';
 
-  const actualReturnPct =
-    ((params.exitPrice - params.entryPrice) / params.entryPrice) * 100;
+  const actualReturnPct = ((params.exitPrice - params.entryPrice) / params.entryPrice) * 100;
 
   await db
     .insert(signalOutcomes)
@@ -1094,9 +1080,11 @@ git commit -m "feat(recommendations): add persistence (upsert + state log + outc
 ## Task 9: Ingestion orchestrator
 
 **Files:**
+
 - Create: `src/server/services/recommendations/ingestion.ts`
 
 Flow:
+
 1. Load all signals not in a terminal recommendation state (LEFT JOIN signal_recommendations; WHERE state is null OR state NOT IN terminal).
 2. For each: load last ~30 daily prices (for ATR + highest close since entry + current price), latest fundamentals (for fundamentalScore).
 3. Build `EvaluationContext`.
@@ -1110,22 +1098,13 @@ Flow:
 ```typescript
 import { and, desc, eq, inArray, isNull, notInArray, or, sql } from 'drizzle-orm';
 import { db } from '@/server/db';
-import {
-  signals,
-  signalRecommendations,
-  fundamentals,
-  dailyPrices,
-} from '@/server/db/schema';
+import { signals, signalRecommendations, fundamentals, dailyPrices } from '@/server/db/schema';
 import { deriveInitialState } from './initial-state';
 import { initialTarget, initialStopLoss } from './targets';
 import { compute14DayATR } from './atr';
 import { computeTrailingStop } from './trailing-stop';
 import { evaluateTransition } from './state-machine';
-import {
-  upsertRecommendation,
-  appendStateLog,
-  writeOutcomeIfTerminal,
-} from './persistence';
+import { upsertRecommendation, appendStateLog, writeOutcomeIfTerminal } from './persistence';
 import type { EvaluationContext, RecommendationState } from './types';
 
 export interface EvaluationSummary {
@@ -1169,16 +1148,8 @@ export async function evaluateAllActiveSignals(): Promise<EvaluationSummary> {
       recTransitionedAt: signalRecommendations.transitionedAt,
     })
     .from(signals)
-    .leftJoin(
-      signalRecommendations,
-      eq(signalRecommendations.signalId, signals.id),
-    )
-    .where(
-      or(
-        isNull(signalRecommendations.id),
-        notInArray(signalRecommendations.state, TERMINAL),
-      ),
-    );
+    .leftJoin(signalRecommendations, eq(signalRecommendations.signalId, signals.id))
+    .where(or(isNull(signalRecommendations.id), notInArray(signalRecommendations.state, TERMINAL)));
 
   for (const row of rows) {
     summary.processed++;
@@ -1242,8 +1213,7 @@ export async function evaluateAllActiveSignals(): Promise<EvaluationSummary> {
       // Entry price = close on signal triggered_at date (find in bars)
       const triggeredDate = new Date(row.triggeredAt).toISOString().slice(0, 10);
       const entryBarIdx = bars.findIndex((b) => b.date >= triggeredDate);
-      const entryPrice =
-        entryBarIdx >= 0 ? Number(bars[entryBarIdx].close) : currentPrice;
+      const entryPrice = entryBarIdx >= 0 ? Number(bars[entryBarIdx].close) : currentPrice;
 
       // Highest close since entry
       const highestCloseSinceEntry = bars
@@ -1253,8 +1223,7 @@ export async function evaluateAllActiveSignals(): Promise<EvaluationSummary> {
       const daysSinceEntry = Math.max(
         0,
         Math.round(
-          (new Date(currentBar.date).getTime() -
-            new Date(triggeredDate).getTime()) /
+          (new Date(currentBar.date).getTime() - new Date(triggeredDate).getTime()) /
             (1000 * 60 * 60 * 24),
         ),
       );
@@ -1263,8 +1232,7 @@ export async function evaluateAllActiveSignals(): Promise<EvaluationSummary> {
         ? Math.max(
             0,
             Math.round(
-              (new Date(currentBar.date).getTime() -
-                new Date(row.recTransitionedAt).getTime()) /
+              (new Date(currentBar.date).getTime() - new Date(row.recTransitionedAt).getTime()) /
                 (1000 * 60 * 60 * 24),
             ),
           )
@@ -1326,10 +1294,7 @@ export async function evaluateAllActiveSignals(): Promise<EvaluationSummary> {
         currentMa200,
       };
 
-      const decision = evaluateTransition(
-        row.recState as RecommendationState,
-        ctx,
-      );
+      const decision = evaluateTransition(row.recState as RecommendationState, ctx);
 
       if (decision.kind === 'no_change') {
         // still update trailing stop even if no transition
@@ -1395,6 +1360,7 @@ git commit -m "feat(recommendations): add orchestrator over active signals"
 ## Task 10: CLI + barrel + script + docs + verification + push
 
 **Files:**
+
 - Create: `src/server/services/recommendations/cli.ts`
 - Create: `src/server/services/recommendations/index.ts`
 - Modify: `package.json`, `CLAUDE.md`
@@ -1443,6 +1409,7 @@ main()
 ```
 
 - [ ] **Step 3: package.json script** after `generate:rationale`:
+
 ```json
 "evaluate:recommendations": "tsx src/server/services/recommendations/cli.ts"
 ```
@@ -1450,11 +1417,13 @@ main()
 - [ ] **Step 4: CLAUDE.md**
 
 "Running Locally" after `pnpm generate:rationale`:
+
 ```
 pnpm evaluate:recommendations    # run FSM over active signals
 ```
 
 "Project Structure" under `services/` after `ai/`:
+
 ```
       recommendations/ FSM, target/stop calc, trailing stop, orchestrator
 ```
@@ -1494,6 +1463,7 @@ git push origin main
 - [x] Lint/format/test/build clean, pushed
 
 ## Out of Scope
+
 - Analyst target integration (spec 4.5)
 - AI rationale update trigger on transition (handled by Phase 6 generation.ts update flow when triggered elsewhere)
 - Email alert queuing (Phase 13)

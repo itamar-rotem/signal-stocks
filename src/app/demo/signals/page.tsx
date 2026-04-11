@@ -26,11 +26,11 @@ export default function DemoSignalsPage() {
       {/* Page header */}
       <header className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <div className="font-mono text-xs tracking-widest text-muted-foreground">
+          <div className="text-muted-foreground font-mono text-xs tracking-widest">
             LODESTAR &#9656; SIGNAL OPS &#9656; DEMO
           </div>
           <h1 className="mt-1 text-3xl font-bold">Signal Control Room</h1>
-          <p className="mt-1 text-sm text-muted-foreground">
+          <p className="text-muted-foreground mt-1 text-sm">
             Real-time screen of AI-scored stock setups with entry, exit, and rationale.
           </p>
         </div>
@@ -74,7 +74,7 @@ export default function DemoSignalsPage() {
 
       {/* Active alerts panel */}
       <Panel title="ACTIVE ALERTS" hint={`${DEMO_SIGNAL_LIST.length} OPEN`}>
-        <div className="divide-y divide-border">
+        <div className="divide-border divide-y">
           {DEMO_SIGNAL_LIST.map((s) => (
             <AlertRow
               key={s.signalId}

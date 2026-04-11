@@ -38,36 +38,34 @@ export function OpportunityCard({
     ? (state as 'BUY' | 'HOLD' | 'WATCH' | 'SELL' | 'STOP_HIT' | 'EXPIRED')
     : 'HOLD';
 
-  const upside =
-    entryPrice > 0 ? fmtPct(((targetPrice - entryPrice) / entryPrice) * 100) : null;
-  const riskPct =
-    entryPrice > 0 ? fmtPct(((entryPrice - stopLoss) / entryPrice) * 100) : null;
+  const upside = entryPrice > 0 ? fmtPct(((targetPrice - entryPrice) / entryPrice) * 100) : null;
+  const riskPct = entryPrice > 0 ? fmtPct(((entryPrice - stopLoss) / entryPrice) * 100) : null;
 
   return (
     <div
       data-ticker={ticker}
       className={cn(
-        'group relative flex flex-col rounded-sm border border-border bg-card',
+        'group border-border bg-card relative flex flex-col rounded-sm border',
         'transition-all duration-200',
         'hover:border-primary/60 hover:shadow-[0_0_0_1px_var(--primary)]',
       )}
     >
       {/* Header */}
-      <div className="flex items-start justify-between gap-3 px-4 pt-4 pb-3 border-b border-border">
-        <div className="flex items-center gap-3 min-w-0">
+      <div className="border-border flex items-start justify-between gap-3 border-b px-4 pt-4 pb-3">
+        <div className="flex min-w-0 items-center gap-3">
           <div>
             <div className="flex items-center gap-2">
               <span className="font-mono text-2xl font-bold tracking-tight">{ticker}</span>
               <SeverityDot severity="medium" pulse />
             </div>
-            <div className="text-muted-foreground text-xs mt-0.5 truncate">
+            <div className="text-muted-foreground mt-0.5 truncate text-xs">
               {name}
               {sector && <span className="text-muted-foreground/60"> · {sector}</span>}
             </div>
           </div>
         </div>
-        <div className="flex items-center gap-2 flex-shrink-0">
-          <span className="font-mono text-[10px] text-muted-foreground/60 uppercase tracking-wider hidden sm:block">
+        <div className="flex flex-shrink-0 items-center gap-2">
+          <span className="text-muted-foreground/60 hidden font-mono text-[10px] tracking-wider uppercase sm:block">
             {signalType}
           </span>
           <StatusPill status={validState} />
@@ -75,34 +73,44 @@ export function OpportunityCard({
       </div>
 
       {/* Body */}
-      <div className="flex flex-col gap-3 px-4 py-3 flex-1">
+      <div className="flex flex-1 flex-col gap-3 px-4 py-3">
         {/* Why — full width */}
         <div>
-          <div className="font-mono text-[9px] text-muted-foreground/60 uppercase tracking-widest mb-1">
+          <div className="text-muted-foreground/60 mb-1 font-mono text-[9px] tracking-widest uppercase">
             WHY
           </div>
-          <p className="text-sm leading-relaxed text-foreground/80">{why}</p>
+          <p className="text-foreground/80 text-sm leading-relaxed">{why}</p>
         </div>
 
         {/* Data grid: BUY / EXIT / STOP */}
-        <div className="grid grid-cols-3 gap-2 border-t border-border pt-3">
+        <div className="border-border grid grid-cols-3 gap-2 border-t pt-3">
           <DataCell label="BUY AT" value={fmtUsd(entryPrice)} />
-          <DataCell label="EXIT AT" value={fmtUsd(targetPrice)} subValue={upside ?? undefined} subTone="buy" />
-          <DataCell label="STOP" value={fmtUsd(stopLoss)} subValue={riskPct ?? undefined} subTone="sell" />
+          <DataCell
+            label="EXIT AT"
+            value={fmtUsd(targetPrice)}
+            subValue={upside ?? undefined}
+            subTone="buy"
+          />
+          <DataCell
+            label="STOP"
+            value={fmtUsd(stopLoss)}
+            subValue={riskPct ?? undefined}
+            subTone="sell"
+          />
         </div>
       </div>
 
       {/* Footer */}
-      <div className="flex items-center justify-between gap-3 px-4 py-2.5 border-t border-border">
+      <div className="border-border flex items-center justify-between gap-3 border-t px-4 py-2.5">
         <div className="flex items-center gap-3">
           <ConfidenceBadge confidence={confidence} />
-          <span className="font-mono text-[10px] text-muted-foreground/60">
+          <span className="text-muted-foreground/60 font-mono text-[10px]">
             {fmtRelTime(triggeredAt)}
           </span>
         </div>
         <Link
           href={href}
-          className="flex items-center gap-1 font-mono text-[11px] text-primary hover:text-primary/80 transition-colors"
+          className="text-primary hover:text-primary/80 flex items-center gap-1 font-mono text-[11px] transition-colors"
         >
           View analysis
           <ArrowUpRight className="h-3 w-3" />
@@ -125,7 +133,7 @@ function DataCell({
 }) {
   return (
     <div>
-      <div className="font-mono text-[9px] text-muted-foreground/60 uppercase tracking-widest mb-1">
+      <div className="text-muted-foreground/60 mb-1 font-mono text-[9px] tracking-widest uppercase">
         {label}
       </div>
       <div className="font-mono text-base font-semibold tabular-nums">{value}</div>
@@ -155,7 +163,7 @@ function ConfidenceBadge({ confidence }: { confidence: string }) {
   return (
     <span
       className={cn(
-        'inline-flex items-center rounded-sm border px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-wider',
+        'inline-flex items-center rounded-sm border px-1.5 py-0.5 font-mono text-[10px] tracking-wider uppercase',
         color,
       )}
     >

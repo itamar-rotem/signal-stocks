@@ -107,6 +107,7 @@ pnpm add @trpc/server@^11.7.0 @trpc/client@^11.7.0 @trpc/react-query@^11.7.0 @tr
 ## Task 1: Install dependencies + shadcn badge primitive
 
 **Files:**
+
 - Modify: `package.json`
 - Create: `src/components/ui/badge.tsx`
 
@@ -145,8 +146,7 @@ const badgeVariants = cva(
 );
 
 export interface BadgeProps
-  extends React.HTMLAttributes<HTMLSpanElement>,
-    VariantProps<typeof badgeVariants> {}
+  extends React.HTMLAttributes<HTMLSpanElement>, VariantProps<typeof badgeVariants> {}
 
 export function Badge({ className, variant, ...props }: BadgeProps) {
   return <span className={cn(badgeVariants({ variant }), className)} {...props} />;
@@ -188,6 +188,7 @@ git commit -m "feat(ui): install tRPC + react-query + superjson, add Badge primi
 ## Task 2: tRPC server core (trpc init + context + root router)
 
 **Files:**
+
 - Create: `src/server/trpc/trpc.ts`
 - Create: `src/server/trpc/context.ts`
 - Create: `src/server/trpc/root.ts`
@@ -255,6 +256,7 @@ git commit -m "feat(trpc): add trpc init, context, and app router shell"
 ## Task 3: Signals router (TDD on pure helpers)
 
 **Files:**
+
 - Create: `src/server/trpc/routers/signals.ts`
 - Create: `src/server/trpc/routers/signals.test.ts`
 
@@ -358,12 +360,7 @@ pnpm vitest run src/server/trpc/routers/signals.test.ts
 import { z } from 'zod';
 import { and, desc, eq, notInArray } from 'drizzle-orm';
 import { db } from '@/server/db';
-import {
-  signals,
-  signalRecommendations,
-  signalRationales,
-  stocks,
-} from '@/server/db/schema';
+import { signals, signalRecommendations, signalRationales, stocks } from '@/server/db/schema';
 import { router, publicProcedure } from '../trpc';
 
 export interface SignalJoinRow {
@@ -458,11 +455,7 @@ export function transformSignalRow(row: SignalJoinRow): SignalViewModel {
   };
 }
 
-const TERMINAL: ('SELL' | 'STOP_HIT' | 'EXPIRED')[] = [
-  'SELL',
-  'STOP_HIT',
-  'EXPIRED',
-];
+const TERMINAL: ('SELL' | 'STOP_HIT' | 'EXPIRED')[] = ['SELL', 'STOP_HIT', 'EXPIRED'];
 
 const signalSelect = {
   signalId: signals.id,
@@ -501,14 +494,8 @@ export const signalsRouter = router({
         .select(signalSelect)
         .from(signals)
         .innerJoin(stocks, eq(stocks.id, signals.stockId))
-        .leftJoin(
-          signalRecommendations,
-          eq(signalRecommendations.signalId, signals.id),
-        )
-        .leftJoin(
-          signalRationales,
-          eq(signalRationales.signalId, signals.id),
-        )
+        .leftJoin(signalRecommendations, eq(signalRecommendations.signalId, signals.id))
+        .leftJoin(signalRationales, eq(signalRationales.signalId, signals.id))
         .where(
           // either no recommendation yet OR rec not in terminal
           notInArray(signalRecommendations.state, TERMINAL),
@@ -527,14 +514,8 @@ export const signalsRouter = router({
         .select(signalSelect)
         .from(signals)
         .innerJoin(stocks, eq(stocks.id, signals.stockId))
-        .leftJoin(
-          signalRecommendations,
-          eq(signalRecommendations.signalId, signals.id),
-        )
-        .leftJoin(
-          signalRationales,
-          eq(signalRationales.signalId, signals.id),
-        )
+        .leftJoin(signalRecommendations, eq(signalRecommendations.signalId, signals.id))
+        .leftJoin(signalRationales, eq(signalRationales.signalId, signals.id))
         .where(eq(stocks.ticker, ticker))
         .orderBy(desc(signals.triggeredAt));
 
@@ -589,6 +570,7 @@ git commit -m "feat(trpc): add signals.list and signals.byTicker queries"
 ## Task 4: tRPC client scaffold (RSC caller + client provider + fetch handler)
 
 **Files:**
+
 - Create: `src/trpc/shared.ts`
 - Create: `src/trpc/client.tsx`
 - Create: `src/trpc/server.ts`
@@ -717,6 +699,7 @@ git commit -m "feat(trpc): add RSC caller, client provider, and fetch route hand
 ## Task 5: Recommendation state badge (TDD)
 
 **Files:**
+
 - Create: `src/components/signals/recommendation-state-badge.tsx`
 - Create: `src/components/signals/recommendation-state-badge.test.ts`
 
@@ -813,6 +796,7 @@ git commit -m "feat(signals): add RecommendationStateBadge with tested variant m
 ## Task 6: Signal type label helper (TDD)
 
 **Files:**
+
 - Create: `src/components/signals/signal-type-label.ts`
 - Create: `src/components/signals/signal-type-label.test.ts`
 
@@ -873,6 +857,7 @@ git commit -m "feat(signals): add signalTypeLabel mapping helper"
 ## Task 7: SignalCard + RationaleCard + EmptyState components
 
 **Files:**
+
 - Create: `src/components/signals/signal-card.tsx`
 - Create: `src/components/signals/rationale-card.tsx`
 - Create: `src/components/signals/empty-state.tsx`
@@ -916,19 +901,14 @@ function fmtScore(n: number | null): string {
 
 export function SignalCard(props: SignalCardProps) {
   return (
-    <Link
-      href={`/stock/${props.ticker}`}
-      className="block transition-shadow hover:shadow-md"
-    >
+    <Link href={`/stock/${props.ticker}`} className="block transition-shadow hover:shadow-md">
       <Card>
         <CardHeader className="pb-2">
           <div className="flex items-start justify-between gap-2">
             <div>
               <CardTitle className="text-lg">{props.ticker}</CardTitle>
               <p className="text-muted-foreground text-xs">{props.name}</p>
-              {props.sector && (
-                <p className="text-muted-foreground text-xs">{props.sector}</p>
-              )}
+              {props.sector && <p className="text-muted-foreground text-xs">{props.sector}</p>}
             </div>
             <RecommendationStateBadge state={props.state} />
           </div>
@@ -936,14 +916,10 @@ export function SignalCard(props: SignalCardProps) {
         <CardContent className="space-y-3 text-sm">
           <div className="flex items-center gap-2">
             <Badge variant="outline">{signalTypeLabel(props.signalType)}</Badge>
-            <Badge
-              variant={props.strength === 'very_strong' ? 'success' : 'secondary'}
-            >
+            <Badge variant={props.strength === 'very_strong' ? 'success' : 'secondary'}>
               {props.strength.replace('_', ' ')}
             </Badge>
-            {props.volumeConfirmed && (
-              <Badge variant="info">Volume ✓</Badge>
-            )}
+            {props.volumeConfirmed && <Badge variant="info">Volume ✓</Badge>}
           </div>
           <div className="grid grid-cols-2 gap-2">
             <Stat label="Signal score" value={fmtScore(props.signalScore)} />
@@ -951,10 +927,7 @@ export function SignalCard(props: SignalCardProps) {
             <Stat label="Last price" value={fmtPrice(props.lastPrice)} />
             <Stat label="Target" value={fmtPrice(props.targetPrice)} />
             <Stat label="Stop" value={fmtPrice(props.stopLoss)} />
-            <Stat
-              label="Triggered"
-              value={props.triggeredAt.toISOString().slice(0, 10)}
-            />
+            <Stat label="Triggered" value={props.triggeredAt.toISOString().slice(0, 10)} />
           </div>
         </CardContent>
       </Card>
@@ -993,9 +966,7 @@ export function RationaleCard(props: RationaleCardProps) {
       <CardHeader>
         <div className="flex items-center justify-between gap-2">
           <CardTitle>AI Rationale</CardTitle>
-          {props.confidence && (
-            <Badge variant="outline">Confidence: {props.confidence}</Badge>
-          )}
+          {props.confidence && <Badge variant="outline">Confidence: {props.confidence}</Badge>}
         </div>
       </CardHeader>
       <CardContent className="space-y-4 text-sm">
@@ -1006,12 +977,8 @@ export function RationaleCard(props: RationaleCardProps) {
         {props.technicalContext && (
           <Section label="Technical context">{props.technicalContext}</Section>
         )}
-        {props.strategyNote && (
-          <Section label="Strategy note">{props.strategyNote}</Section>
-        )}
-        <p className="text-muted-foreground border-t pt-3 text-xs italic">
-          {props.disclaimer}
-        </p>
+        {props.strategyNote && <Section label="Strategy note">{props.strategyNote}</Section>}
+        <p className="text-muted-foreground border-t pt-3 text-xs italic">{props.disclaimer}</p>
       </CardContent>
     </Card>
   );
@@ -1020,9 +987,7 @@ export function RationaleCard(props: RationaleCardProps) {
 function Section({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div>
-      <div className="text-muted-foreground text-xs font-medium uppercase">
-        {label}
-      </div>
+      <div className="text-muted-foreground text-xs font-medium uppercase">{label}</div>
       <div className="mt-1 whitespace-pre-line">{children}</div>
     </div>
   );
@@ -1034,13 +999,7 @@ function Section({ label, children }: { label: string; children: React.ReactNode
 ```tsx
 import { Card, CardContent } from '@/components/ui/card';
 
-export function EmptyState({
-  title,
-  description,
-}: {
-  title: string;
-  description: string;
-}) {
+export function EmptyState({ title, description }: { title: string; description: string }) {
   return (
     <Card>
       <CardContent className="py-10 text-center">
@@ -1070,6 +1029,7 @@ git commit -m "feat(signals): add SignalCard, RationaleCard, and EmptyState comp
 ## Task 8: Dashboard layout + Signals page + placeholder tabs
 
 **Files:**
+
 - Create: `src/app/(auth)/dashboard/layout.tsx`
 - Replace: `src/app/(auth)/dashboard/page.tsx`
 - Create: `src/app/(auth)/dashboard/signals/page.tsx`
@@ -1084,11 +1044,7 @@ git commit -m "feat(signals): add SignalCard, RationaleCard, and EmptyState comp
 import { SiteNav } from '@/components/layout/site-nav';
 import { TRPCProvider } from '@/trpc/client';
 
-export default function DashboardLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
     <TRPCProvider>
       <SiteNav />
@@ -1256,6 +1212,7 @@ git commit -m "feat(dashboard): add dashboard layout, signals list page, and pla
 ## Task 9: Stock detail page `/stock/[ticker]`
 
 **Files:**
+
 - Create: `src/app/(auth)/stock/[ticker]/page.tsx`
 
 - [ ] **Step 1: Update middleware** — confirm `createRouteMatcher` already covers `/stock(.*)`. Open `middleware.ts` and if the matcher is only `/dashboard(.*)`, extend it to `['/dashboard(.*)', '/stock(.*)']`.
@@ -1348,9 +1305,7 @@ export default async function StockDetailPage({ params }: PageProps) {
                 <div className="flex items-center gap-3 text-sm">
                   <span>Target {fmtPrice(s.recommendation?.targetPrice ?? null)}</span>
                   <span>Stop {fmtPrice(s.recommendation?.stopLoss ?? null)}</span>
-                  <RecommendationStateBadge
-                    state={s.recommendation?.state ?? null}
-                  />
+                  <RecommendationStateBadge state={s.recommendation?.state ?? null} />
                 </div>
               </li>
             ))}
@@ -1363,6 +1318,7 @@ export default async function StockDetailPage({ params }: PageProps) {
 ```
 
 Notes on the detail page:
+
 - It uses the RSC caller for `signals.byTicker` and then a direct `db` query for the full rationale. The router does not expose the full rationale fields — adding a dedicated `rationale.byTicker` query would be cleaner but is unnecessary given one extra query per page load.
 - `/stock/[ticker]` lives under `(auth)` so Clerk gates it. Confirm `middleware.ts` matches.
 
@@ -1385,11 +1341,13 @@ git commit -m "feat(dashboard): add /stock/[ticker] detail page with rationale +
 ## Task 10: Final verification + docs + push
 
 **Files:**
+
 - Modify: `CLAUDE.md`
 
 - [ ] **Step 1: Update `CLAUDE.md`**
 
 Under "Project Structure", after the `ai/` line in `services/`, add nothing (already there). Under `app/`, update the `(auth)/` section to reflect new routes:
+
 ```
     (auth)/         Clerk-protected routes
       dashboard/
@@ -1398,13 +1356,17 @@ Under "Project Structure", after the `ai/` line in `services/`, add nothing (alr
         trades/
       stock/[ticker]/
 ```
+
 Under `server/`, add:
+
 ```
     trpc/           tRPC routers (signals)
 ```
+
 (Next to the existing tRPC line — it already mentions "tRPC routers (later)". Replace "(later)" with "(signals — Phase 9a)".)
 
 Under a new "Phase 9a" paragraph at the bottom of "Project Decisions" or "Known API Gotchas", add:
+
 ```
 ### tRPC v11 + Next.js 16 App Router
 

@@ -35,7 +35,7 @@ export function MetricTile({
     <div
       data-metric={label}
       className={cn(
-        'relative overflow-hidden rounded-sm border bg-card',
+        'bg-card relative overflow-hidden rounded-sm border',
         TONE_BORDER[tone],
         small ? 'px-3 py-2' : 'px-4 py-3',
       )}
@@ -58,7 +58,7 @@ export function MetricTile({
         <div className="min-w-0">
           <div
             className={cn(
-              'font-mono tracking-widest text-muted-foreground uppercase',
+              'text-muted-foreground font-mono tracking-widest uppercase',
               small ? 'text-[9px]' : 'text-[10px]',
             )}
           >
@@ -66,7 +66,7 @@ export function MetricTile({
           </div>
           <div
             className={cn(
-              'font-mono font-bold tabular-nums leading-none mt-1',
+              'mt-1 font-mono leading-none font-bold tabular-nums',
               small ? 'text-lg' : 'text-3xl',
             )}
           >
@@ -75,7 +75,7 @@ export function MetricTile({
           {hint && (
             <div
               className={cn(
-                'font-mono mt-1',
+                'mt-1 font-mono',
                 small ? 'text-[9px]' : 'text-[11px]',
                 TONE_HINT[tone],
               )}

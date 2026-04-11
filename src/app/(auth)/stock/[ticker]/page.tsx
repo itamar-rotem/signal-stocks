@@ -52,7 +52,7 @@ export default async function StockDetailPage({ params }: PageProps) {
             <p className="text-muted-foreground">{data.stock.name}</p>
           </div>
           {data.stock.sector && (
-            <p className="mt-1 text-sm text-muted-foreground">{data.stock.sector}</p>
+            <p className="text-muted-foreground mt-1 text-sm">{data.stock.sector}</p>
           )}
         </header>
 
@@ -82,7 +82,7 @@ export default async function StockDetailPage({ params }: PageProps) {
         )}
 
         <Panel title="SIGNAL HISTORY">
-          <ul className="divide-y divide-border">
+          <ul className="divide-border divide-y">
             {data.signals.map((s) => (
               <li
                 key={s.signalId}
@@ -93,7 +93,7 @@ export default async function StockDetailPage({ params }: PageProps) {
                   <Badge variant="secondary">{s.strength.replace('_', ' ')}</Badge>
                   {s.volumeConfirmed && <Badge variant="info">Volume ✓</Badge>}
                 </div>
-                <div className="font-mono text-xs text-muted-foreground">
+                <div className="text-muted-foreground font-mono text-xs">
                   {s.triggeredAt.toISOString().slice(0, 10)}
                 </div>
                 <div className="flex items-center gap-3 font-mono text-sm tabular-nums">

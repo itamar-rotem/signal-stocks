@@ -13,7 +13,7 @@ const TABS = [
 export function SiteNav() {
   const pathname = usePathname();
   return (
-    <nav className="border-b border-border">
+    <nav className="border-border border-b">
       <div className="mx-auto flex max-w-7xl gap-1 px-4">
         {TABS.map((tab) => {
           const active = pathname === tab.href;
@@ -22,10 +22,10 @@ export function SiteNav() {
               key={tab.href}
               href={tab.href}
               className={cn(
-                'border-b-2 px-3 py-2.5 font-mono text-[11px] tracking-widest transition-colors uppercase',
+                'border-b-2 px-3 py-2.5 font-mono text-[11px] tracking-widest uppercase transition-colors',
                 active
                   ? 'border-primary text-foreground'
-                  : 'border-transparent text-muted-foreground hover:text-foreground hover:border-primary/40',
+                  : 'text-muted-foreground hover:text-foreground hover:border-primary/40 border-transparent',
               )}
             >
               {tab.label}

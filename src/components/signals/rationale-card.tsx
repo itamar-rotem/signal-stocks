@@ -14,11 +14,11 @@ export function RationaleCard(props: RationaleCardProps) {
   return (
     <div className={cn('space-y-4 text-sm', props.className)}>
       <div className="flex items-center justify-between gap-2">
-        <span className="font-mono text-[10px] font-medium tracking-widest text-muted-foreground uppercase">
+        <span className="text-muted-foreground font-mono text-[10px] font-medium tracking-widest uppercase">
           AI Rationale
         </span>
         {props.confidence && (
-          <span className="inline-flex items-center rounded-sm border border-border px-2 py-0.5 font-mono text-[10px] text-muted-foreground">
+          <span className="border-border text-muted-foreground inline-flex items-center rounded-sm border px-2 py-0.5 font-mono text-[10px]">
             Confidence: {props.confidence}
           </span>
         )}
@@ -31,7 +31,7 @@ export function RationaleCard(props: RationaleCardProps) {
         <Section label="Technical context">{props.technicalContext}</Section>
       )}
       {props.strategyNote && <Section label="Strategy note">{props.strategyNote}</Section>}
-      <p className="border-t border-border pt-3 text-xs italic text-muted-foreground">
+      <p className="border-border text-muted-foreground border-t pt-3 text-xs italic">
         {props.disclaimer}
       </p>
     </div>
@@ -41,7 +41,7 @@ export function RationaleCard(props: RationaleCardProps) {
 function Section({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div>
-      <div className="font-mono text-[10px] font-medium uppercase tracking-widest text-muted-foreground/60">
+      <div className="text-muted-foreground/60 font-mono text-[10px] font-medium tracking-widest uppercase">
         {label}
       </div>
       <div className="mt-1 whitespace-pre-line">{children}</div>

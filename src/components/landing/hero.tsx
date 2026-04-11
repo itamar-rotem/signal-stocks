@@ -21,7 +21,7 @@ export function Hero() {
       />
       <div className="mx-auto flex max-w-4xl flex-col items-center px-4 py-24 text-center">
         {/* Live badge */}
-        <div className="font-mono text-xs tracking-widest text-cyan-400 mb-4 animate-fade-up">
+        <div className="animate-fade-up mb-4 font-mono text-xs tracking-widest text-cyan-400">
           &#9679; MARKET OPS &middot; LIVE
         </div>
         <Logo size="xl" animated />

@@ -9,7 +9,7 @@ export function Header() {
   const { isSignedIn } = useAuth();
 
   return (
-    <header className="sticky top-0 z-40 border-b border-border bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="border-border bg-background/80 supports-[backdrop-filter]:bg-background/60 sticky top-0 z-40 border-b backdrop-blur">
       <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4">
         <Link
           href="/"
@@ -25,16 +25,13 @@ export function Header() {
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="font-mono text-xs uppercase tracking-wider"
+                  className="font-mono text-xs tracking-wider uppercase"
                 >
                   Sign in
                 </Button>
               </Link>
               <Link href="/sign-up">
-                <Button
-                  size="sm"
-                  className="font-mono text-xs uppercase tracking-wider"
-                >
+                <Button size="sm" className="font-mono text-xs tracking-wider uppercase">
                   Sign up
                 </Button>
               </Link>
@@ -45,7 +42,7 @@ export function Header() {
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="font-mono text-xs uppercase tracking-wider"
+                  className="font-mono text-xs tracking-wider uppercase"
                 >
                   Dashboard
                 </Button>

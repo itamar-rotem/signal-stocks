@@ -10,17 +10,17 @@ export interface PanelProps {
 
 export function Panel({ title, hint, action, children, className }: PanelProps) {
   return (
-    <div className={cn('rounded-sm border border-border bg-card', className)}>
+    <div className={cn('border-border bg-card rounded-sm border', className)}>
       {(title || action) && (
-        <div className="flex items-center justify-between gap-3 border-b border-border px-4 py-2.5">
-          <div className="flex items-center gap-3 min-w-0">
+        <div className="border-border flex items-center justify-between gap-3 border-b px-4 py-2.5">
+          <div className="flex min-w-0 items-center gap-3">
             {title && (
-              <span className="font-mono text-[11px] font-medium tracking-widest text-muted-foreground uppercase">
+              <span className="text-muted-foreground font-mono text-[11px] font-medium tracking-widest uppercase">
                 {title}
               </span>
             )}
             {hint && (
-              <span className="font-mono text-[10px] tracking-wider text-muted-foreground/60 uppercase">
+              <span className="text-muted-foreground/60 font-mono text-[10px] tracking-wider uppercase">
                 {hint}
               </span>
             )}

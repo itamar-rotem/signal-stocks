@@ -18,7 +18,7 @@ export function SeverityDot({ severity, pulse = false }: SeverityDotProps) {
     <span
       data-severity={severity}
       className={cn(
-        'inline-block h-2 w-2 rounded-full flex-shrink-0',
+        'inline-block h-2 w-2 flex-shrink-0 rounded-full',
         COLOR_MAP[severity],
         pulse && 'animate-pulse-dot',
       )}

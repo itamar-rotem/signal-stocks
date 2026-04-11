@@ -46,7 +46,7 @@ export default async function DemoStockDetailPage({ params }: PageProps) {
   return (
     <section className="space-y-6">
       {/* Breadcrumb */}
-      <div className="font-mono text-xs tracking-widest text-muted-foreground">
+      <div className="text-muted-foreground font-mono text-xs tracking-widest">
         LODESTAR &#9656; SIGNAL OPS &#9656; DEMO &#9656; {upper}
       </div>
 
@@ -58,7 +58,7 @@ export default async function DemoStockDetailPage({ params }: PageProps) {
             <StatusPill status={validState} />
             <SeverityDot severity="medium" pulse />
           </div>
-          <p className="mt-1 text-muted-foreground">
+          <p className="text-muted-foreground mt-1">
             {detail.stock.name}
             {detail.stock.sector && (
               <span className="text-muted-foreground/60"> · {detail.stock.sector}</span>
@@ -73,10 +73,7 @@ export default async function DemoStockDetailPage({ params }: PageProps) {
       </div>
 
       {/* Chart panel */}
-      <Panel
-        title="PRICE · MA200 · SIGNAL MARKERS"
-        hint={`${bars.length} DAYS`}
-      >
+      <Panel title="PRICE · MA200 · SIGNAL MARKERS" hint={`${bars.length} DAYS`}>
         <StockChart bars={bars} ma200Series={ma200Series} markers={markers} height={420} />
       </Panel>
 
@@ -96,7 +93,7 @@ export default async function DemoStockDetailPage({ params }: PageProps) {
         </Panel>
 
         <Panel title="SIGNAL HISTORY">
-          <ul className="divide-y divide-border">
+          <ul className="divide-border divide-y">
             {detail.signals.map((s) => (
               <li
                 key={s.signalId}
@@ -107,7 +104,7 @@ export default async function DemoStockDetailPage({ params }: PageProps) {
                   <Badge variant="secondary">{s.strength.replace('_', ' ')}</Badge>
                   {s.volumeConfirmed && <Badge variant="info">Volume ✓</Badge>}
                 </div>
-                <div className="font-mono text-xs text-muted-foreground">
+                <div className="text-muted-foreground font-mono text-xs">
                   {s.triggeredAt.toISOString().slice(0, 10)}
                 </div>
                 <div className="flex items-center gap-3 font-mono text-sm tabular-nums">
