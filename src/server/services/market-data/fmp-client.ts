@@ -49,10 +49,7 @@ export class FmpClient implements MarketDataProvider {
     }
 
     if (!response.ok) {
-      throw new FmpApiError(
-        `FMP returned ${response.status} for ${ticker}`,
-        response.status,
-      );
+      throw new FmpApiError(`FMP returned ${response.status} for ${ticker}`, response.status);
     }
 
     const json: unknown = await response.json();

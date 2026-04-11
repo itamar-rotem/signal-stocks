@@ -28,8 +28,6 @@ export function parseFmpHistorical(raw: unknown): FmpHistoricalResponse {
   const parsed = FmpHistoricalResponseSchema.parse(raw);
   return {
     symbol: parsed.symbol,
-    historical: [...parsed.historical].sort((a, b) =>
-      a.date.localeCompare(b.date),
-    ),
+    historical: [...parsed.historical].sort((a, b) => a.date.localeCompare(b.date)),
   };
 }

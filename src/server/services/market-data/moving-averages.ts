@@ -6,10 +6,7 @@
  * @param closes - series of close prices in chronological (ascending) order
  * @param window - window size (e.g. 150, 200)
  */
-export function computeSMA(
-  closes: number[],
-  window: number,
-): (number | null)[] {
+export function computeSMA(closes: number[], window: number): (number | null)[] {
   if (window <= 0) {
     throw new Error(`computeSMA: window must be positive, got ${window}`);
   }
@@ -39,10 +36,7 @@ export function computeSMA(
  * @param series - values in chronological order; may contain nulls
  * @param lookback - number of periods to look back (e.g. 5 for a 5-day slope)
  */
-export function computeSlope(
-  series: (number | null)[],
-  lookback: number,
-): (number | null)[] {
+export function computeSlope(series: (number | null)[], lookback: number): (number | null)[] {
   if (lookback <= 0) {
     throw new Error(`computeSlope: lookback must be positive, got ${lookback}`);
   }

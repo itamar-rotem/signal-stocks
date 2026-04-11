@@ -73,10 +73,7 @@ describe('fmpHistoricalToDbRows', () => {
   });
 
   it('returns empty array for empty historical', () => {
-    const rows = fmpHistoricalToDbRows(
-      { symbol: 'TEST', historical: [] },
-      42,
-    );
+    const rows = fmpHistoricalToDbRows({ symbol: 'TEST', historical: [] }, 42);
     expect(rows).toEqual([]);
   });
 

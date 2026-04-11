@@ -37,7 +37,9 @@ src/
       seed-parser.ts, seed-parser.test.ts
       index.ts      Drizzle client
     trpc/           tRPC routers (later)
-    services/       Business logic (signals, scoring, AI, alerts) (later)
+    services/
+      market-data/  FMP client, MA computation, EOD ingestion, cli.ts
+      ...           signals, scoring, AI, alerts (later phases)
     inngest/        Pipeline step functions (later)
   components/
     ui/             shadcn/ui primitives (button, card, ...)
@@ -67,6 +69,10 @@ middleware.ts       Clerk auth middleware (at project root, NOT in src/)
 
 - The `Button` component uses `@base-ui/react/button`, not Radix. It does **not** support the `asChild` prop. Wrap buttons inside `Link` manually instead of using `<Button asChild>`.
 
+### Drizzle numeric columns
+
+- Drizzle 0.45 returns `numeric(p, s)` columns as **strings** to preserve precision. Pure computation functions in `services/market-data/` operate on `number`; conversion happens only at the DB boundary inside `transform.ts` and `ingestion.ts`. Do not change this — switching to `mode: 'number'` would leak floating-point drift into stored prices.
+
 ### Tailwind v4
 
 - No `tailwind.config.js`. Theme is defined via `@theme` blocks in `src/app/globals.css`. shadcn CSS variables live in the same file.
@@ -85,6 +91,7 @@ pnpm format:check     # Prettier (check)
 pnpm db:push          # apply Drizzle schema to Neon (Phase 2+)
 pnpm db:studio        # open Drizzle Studio (Phase 2+)
 pnpm db:seed          # load starter universe (after db:push)
+pnpm ingest:prices    # fetch EOD prices + compute MAs (needs FMP_API_KEY)
 ```
 
 ## Design Spec and Plans
