@@ -1,0 +1,38 @@
+[
+  {
+    "symbol": "AAPL",
+    "date": "2026-03-31",
+    "calendarYear": "2026",
+    "period": "Q1",
+    "revenue": 95000000000,
+    "eps": 1.65,
+    "epsdiluted": 1.64,
+    "grossProfit": 42750000000,
+    "operatingIncome": 28500000000,
+    "netIncome": 23750000000
+  },
+  {
+    "symbol": "AAPL",
+    "date": "2025-12-31",
+    "calendarYear": "2025",
+    "period": "Q4",
+    "revenue": 124000000000,
+    "eps": 2.18,
+    "epsdiluted": 2.17,
+    "grossProfit": 54560000000,
+    "operatingIncome": 35960000000,
+    "netIncome": 29760000000
+  },
+  {
+    "symbol": "AAPL",
+    "date": "2025-03-31",
+    "calendarYear": "2025",
+    "period": "Q1",
+    "revenue": 90000000000,
+    "eps": 1.52,
+    "epsdiluted": 1.51,
+    "grossProfit": 40500000000,
+    "operatingIncome": 27000000000,
+    "netIncome": 22500000000
+  }
+]

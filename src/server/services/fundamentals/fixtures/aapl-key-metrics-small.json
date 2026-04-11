@@ -1,0 +1,24 @@
+[
+  {
+    "symbol": "AAPL",
+    "date": "2026-03-31",
+    "calendarYear": "2026",
+    "period": "Q1",
+    "roic": 0.55,
+    "freeCashFlowYield": 0.038,
+    "enterpriseValueOverEBITDA": 22.5,
+    "pegRatio": 2.1,
+    "peRatio": 32.0
+  },
+  {
+    "symbol": "AAPL",
+    "date": "2025-12-31",
+    "calendarYear": "2025",
+    "period": "Q4",
+    "roic": 0.52,
+    "freeCashFlowYield": 0.036,
+    "enterpriseValueOverEBITDA": 21.8,
+    "pegRatio": 2.0,
+    "peRatio": 31.0
+  }
+]

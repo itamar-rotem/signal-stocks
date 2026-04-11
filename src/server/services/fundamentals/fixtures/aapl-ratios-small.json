@@ -1,0 +1,34 @@
+[
+  {
+    "symbol": "AAPL",
+    "date": "2026-03-31",
+    "calendarYear": "2026",
+    "period": "Q1",
+    "grossProfitMargin": 0.45,
+    "operatingProfitMargin": 0.30,
+    "netProfitMargin": 0.25,
+    "returnOnEquity": 1.55,
+    "returnOnAssets": 0.28,
+    "currentRatio": 1.04,
+    "debtEquityRatio": 1.95,
+    "interestCoverage": 42.0,
+    "priceEarningsRatio": 32.0,
+    "priceToSalesRatio": 8.5
+  },
+  {
+    "symbol": "AAPL",
+    "date": "2025-12-31",
+    "calendarYear": "2025",
+    "period": "Q4",
+    "grossProfitMargin": 0.44,
+    "operatingProfitMargin": 0.29,
+    "netProfitMargin": 0.24,
+    "returnOnEquity": 1.50,
+    "returnOnAssets": 0.27,
+    "currentRatio": 1.08,
+    "debtEquityRatio": 1.88,
+    "interestCoverage": 40.0,
+    "priceEarningsRatio": 31.0,
+    "priceToSalesRatio": 8.3
+  }
+]
