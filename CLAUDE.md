@@ -13,7 +13,7 @@ AI-Powered Stock Screener & Active Investing Companion.
 - **Neon PostgreSQL** + **Drizzle ORM** (`@neondatabase/serverless`)
 - **Clerk v7** authentication
 - **Lightweight Charts** (TradingView OSS) for financial charts (later phase)
-- **Anthropic Claude API** (Sonnet) for AI rationale (later phase)
+- **Anthropic Claude API** (`@anthropic-ai/sdk`) — Claude Sonnet for AI rationale generation (`AnthropicRationaleClient` in `services/ai/`)
 - **Financial Modeling Prep (FMP)** for market data (later phase)
 - **Inngest** for the daily pipeline (later phase)
 - **Resend** for email alerts (later phase)
@@ -41,7 +41,8 @@ src/
       market-data/  FMP client, MA computation, EOD ingestion, cli.ts
       fundamentals/ FMP ratios+metrics+income client, scoring, ingestion
       signals/      eligibility, detectors, composite scoring, ingestion
-      ...           scoring, AI, alerts (later phases)
+      ai/           Claude client, prompts, rationale generation, persistence
+      ...           scoring, alerts (later phases)
     inngest/        Pipeline step functions (later)
   components/
     ui/             shadcn/ui primitives (button, card, ...)
@@ -96,6 +97,7 @@ pnpm db:seed          # load starter universe (after db:push)
 pnpm ingest:prices    # fetch EOD prices + compute MAs (needs FMP_API_KEY)
 pnpm ingest:fundamentals   # fetch ratios + score stocks (needs FMP_API_KEY)
 pnpm detect:signals        # run signal detectors against stored prices+fundamentals
+pnpm generate:rationale    # generate AI rationale for signals (needs ANTHROPIC_API_KEY)
 ```
 
 ## Design Spec and Plans

@@ -21,7 +21,8 @@
     "db:seed": "tsx src/server/db/seed.ts",
     "ingest:prices": "tsx src/server/services/market-data/cli.ts",
     "ingest:fundamentals": "tsx src/server/services/fundamentals/cli.ts",
-    "detect:signals": "tsx src/server/services/signals/cli.ts"
+    "detect:signals": "tsx src/server/services/signals/cli.ts",
+    "generate:rationale": "tsx src/server/services/ai/cli.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.88.0",
