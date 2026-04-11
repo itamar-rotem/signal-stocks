@@ -1,21 +1,12 @@
 import { desc, eq, isNull, notInArray, or } from 'drizzle-orm';
 import { db } from '@/server/db';
-import {
-  signals,
-  signalRecommendations,
-  fundamentals,
-  dailyPrices,
-} from '@/server/db/schema';
+import { signals, signalRecommendations, fundamentals, dailyPrices } from '@/server/db/schema';
 import { deriveInitialState } from './initial-state';
 import { initialTarget, initialStopLoss } from './targets';
 import { compute14DayATR } from './atr';
 import { computeTrailingStop } from './trailing-stop';
 import { evaluateTransition } from './state-machine';
-import {
-  upsertRecommendation,
-  appendStateLog,
-  writeOutcomeIfTerminal,
-} from './persistence';
+import { upsertRecommendation, appendStateLog, writeOutcomeIfTerminal } from './persistence';
 import type { EvaluationContext, RecommendationState } from './types';
 
 export interface EvaluationSummary {
@@ -60,16 +51,8 @@ export async function evaluateAllActiveSignals(): Promise<EvaluationSummary> {
       recId: signalRecommendations.id,
     })
     .from(signals)
-    .leftJoin(
-      signalRecommendations,
-      eq(signalRecommendations.signalId, signals.id),
-    )
-    .where(
-      or(
-        isNull(signalRecommendations.id),
-        notInArray(signalRecommendations.state, TERMINAL),
-      ),
-    );
+    .leftJoin(signalRecommendations, eq(signalRecommendations.signalId, signals.id))
+    .where(or(isNull(signalRecommendations.id), notInArray(signalRecommendations.state, TERMINAL)));
 
   for (const row of rows) {
     summary.processed++;
@@ -129,8 +112,7 @@ export async function evaluateAllActiveSignals(): Promise<EvaluationSummary> {
 
       const triggeredDate = new Date(row.triggeredAt).toISOString().slice(0, 10);
       const entryBarIdx = bars.findIndex((b) => b.date >= triggeredDate);
-      const entryPrice =
-        entryBarIdx >= 0 ? Number(bars[entryBarIdx].close) : currentPrice;
+      const entryPrice = entryBarIdx >= 0 ? Number(bars[entryBarIdx].close) : currentPrice;
 
       const highestCloseSinceEntry = bars
         .slice(entryBarIdx >= 0 ? entryBarIdx : 0)
@@ -139,8 +121,7 @@ export async function evaluateAllActiveSignals(): Promise<EvaluationSummary> {
       const daysSinceEntry = Math.max(
         0,
         Math.round(
-          (new Date(currentBar.date).getTime() -
-            new Date(triggeredDate).getTime()) /
+          (new Date(currentBar.date).getTime() - new Date(triggeredDate).getTime()) /
             (1000 * 60 * 60 * 24),
         ),
       );
@@ -149,8 +130,7 @@ export async function evaluateAllActiveSignals(): Promise<EvaluationSummary> {
         ? Math.max(
             0,
             Math.round(
-              (new Date(currentBar.date).getTime() -
-                new Date(row.recTransitionedAt).getTime()) /
+              (new Date(currentBar.date).getTime() - new Date(row.recTransitionedAt).getTime()) /
                 (1000 * 60 * 60 * 24),
             ),
           )
@@ -212,10 +192,7 @@ export async function evaluateAllActiveSignals(): Promise<EvaluationSummary> {
         currentMa200,
       };
 
-      const decision = evaluateTransition(
-        row.recState as RecommendationState,
-        ctx,
-      );
+      const decision = evaluateTransition(row.recState as RecommendationState, ctx);
 
       if (decision.kind === 'no_change') {
         if (trailingStop !== stopLoss) {

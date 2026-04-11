@@ -1,15 +1,10 @@
 import { sql } from 'drizzle-orm';
 import { db } from '@/server/db';
-import {
-  signalRecommendations,
-  signalStateLog,
-  signalOutcomes,
-} from '@/server/db/schema';
+import { signalRecommendations, signalStateLog, signalOutcomes } from '@/server/db/schema';
 import type { RecommendationState, Decision } from './types';
 import { TERMINAL_STATES } from './types';
 
-const toStr = (n: number | null): string | null =>
-  n === null ? null : String(n);
+const toStr = (n: number | null): string | null => (n === null ? null : String(n));
 
 export async function upsertRecommendation(params: {
   signalId: number;
@@ -19,8 +14,7 @@ export async function upsertRecommendation(params: {
   stopLoss: number | null;
   trailingStop: number | null;
 }): Promise<void> {
-  const { signalId, state, previousState, targetPrice, stopLoss, trailingStop } =
-    params;
+  const { signalId, state, previousState, targetPrice, stopLoss, trailingStop } = params;
   await db
     .insert(signalRecommendations)
     .values({
@@ -75,8 +69,7 @@ export async function writeOutcomeIfTerminal(params: {
         ? 'stopped_out'
         : 'expired';
 
-  const actualReturnPct =
-    ((params.exitPrice - params.entryPrice) / params.entryPrice) * 100;
+  const actualReturnPct = ((params.exitPrice - params.entryPrice) / params.entryPrice) * 100;
 
   await db
     .insert(signalOutcomes)

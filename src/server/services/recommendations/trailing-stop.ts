@@ -12,8 +12,7 @@ const PROFIT_LOCK_OFFSET = 0.05;
 const ATR_MULTIPLIER = 2;
 
 export function computeTrailingStop(input: TrailingStopInput): number {
-  const { entryPrice, currentPrice, highestCloseSinceEntry, atr14, currentStopLoss } =
-    input;
+  const { entryPrice, currentPrice, highestCloseSinceEntry, atr14, currentStopLoss } = input;
   const gainPct = (currentPrice - entryPrice) / entryPrice;
 
   const candidates: number[] = [];

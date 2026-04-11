@@ -5,10 +5,7 @@
  * upsidePct = max(5%, score/100 × 20%)
  * target    = entry × (1 + upsidePct)
  */
-export function initialTarget(
-  entryPrice: number,
-  signalScore: number | null,
-): number | null {
+export function initialTarget(entryPrice: number, signalScore: number | null): number | null {
   if (signalScore === null) return null;
   const raw = (signalScore / 100) * 0.2;
   const upsidePct = Math.max(0.05, raw);

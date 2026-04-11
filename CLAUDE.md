@@ -42,6 +42,7 @@ src/
       fundamentals/ FMP ratios+metrics+income client, scoring, ingestion
       signals/      eligibility, detectors, composite scoring, ingestion
       ai/           Claude client, prompts, rationale generation, persistence
+      recommendations/ FSM, target/stop calc, trailing stop, orchestrator
       ...           scoring, alerts (later phases)
     inngest/        Pipeline step functions (later)
   components/
@@ -98,6 +99,7 @@ pnpm ingest:prices    # fetch EOD prices + compute MAs (needs FMP_API_KEY)
 pnpm ingest:fundamentals   # fetch ratios + score stocks (needs FMP_API_KEY)
 pnpm detect:signals        # run signal detectors against stored prices+fundamentals
 pnpm generate:rationale    # generate AI rationale for signals (needs ANTHROPIC_API_KEY)
+pnpm evaluate:recommendations    # run FSM over active signals
 ```
 
 ## Design Spec and Plans

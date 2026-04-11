@@ -17,9 +17,7 @@ describe('compute14DayATR', () => {
   });
 
   it('returns a positive ATR for a volatile series', () => {
-    const bars = Array.from({ length: 20 }, (_, i) =>
-      bar(100 + i, 90 + i, 95 + i, i),
-    );
+    const bars = Array.from({ length: 20 }, (_, i) => bar(100 + i, 90 + i, 95 + i, i));
     const atr = compute14DayATR(bars);
     expect(atr).not.toBeNull();
     expect(atr!).toBeGreaterThan(0);

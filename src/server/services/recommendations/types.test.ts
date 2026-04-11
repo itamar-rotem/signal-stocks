@@ -1,9 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import type {
-  RecommendationState,
-  EvaluationContext,
-  Decision,
-} from './types';
+import type { RecommendationState, EvaluationContext, Decision } from './types';
 
 describe('recommendation types', () => {
   it('RecommendationState union', () => {

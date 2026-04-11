@@ -42,10 +42,7 @@ function halfwayToTarget(ctx: EvaluationContext): boolean {
   return ctx.currentPrice >= halfway;
 }
 
-function transition(
-  to: RecommendationState,
-  reason: string,
-): Decision {
+function transition(to: RecommendationState, reason: string): Decision {
   return {
     kind: 'transition',
     to,
@@ -56,10 +53,7 @@ function transition(
   };
 }
 
-export function evaluateTransition(
-  current: RecommendationState,
-  ctx: EvaluationContext,
-): Decision {
+export function evaluateTransition(current: RecommendationState, ctx: EvaluationContext): Decision {
   if (TERMINAL_STATES.has(current)) return { kind: 'no_change' };
 
   switch (current) {
@@ -116,11 +110,7 @@ export function evaluateTransition(
       if (hitStop(ctx)) {
         return transition('STOP_HIT', 'Stop hit while downgraded');
       }
-      if (
-        ctx.fundamentalScore !== null &&
-        ctx.fundamentalScore >= 60 &&
-        priceReclaimedMa(ctx)
-      ) {
+      if (ctx.fundamentalScore !== null && ctx.fundamentalScore >= 60 && priceReclaimedMa(ctx)) {
         return transition('HOLD', 'Fundamentals recovered and price reclaimed MA');
       }
       return { kind: 'no_change' };
