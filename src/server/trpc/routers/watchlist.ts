@@ -3,18 +3,10 @@ import { eq, and, desc } from 'drizzle-orm';
 import { TRPCError } from '@trpc/server';
 import { router, protectedProcedure } from '../trpc';
 import { db } from '@/server/db';
-import { users, watchlists, stocks } from '@/server/db/schema';
+import { watchlists, stocks } from '@/server/db/schema';
+import { getOrCreateUser } from '../helpers';
 
-export async function getOrCreateUser(clerkUserId: string): Promise<number> {
-  const [existing] = await db
-    .select({ id: users.id })
-    .from(users)
-    .where(eq(users.clerkUserId, clerkUserId))
-    .limit(1);
-  if (existing) return existing.id;
-  const [inserted] = await db.insert(users).values({ clerkUserId }).returning({ id: users.id });
-  return inserted.id;
-}
+export { getOrCreateUser };
 
 export const watchlistRouter = router({
   list: protectedProcedure.query(async ({ ctx }) => {
