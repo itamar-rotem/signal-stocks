@@ -12,10 +12,7 @@ export async function getOrCreateUser(clerkUserId: string): Promise<number> {
     .where(eq(users.clerkUserId, clerkUserId))
     .limit(1);
   if (existing) return existing.id;
-  const [inserted] = await db
-    .insert(users)
-    .values({ clerkUserId })
-    .returning({ id: users.id });
+  const [inserted] = await db.insert(users).values({ clerkUserId }).returning({ id: users.id });
   return inserted.id;
 }
 

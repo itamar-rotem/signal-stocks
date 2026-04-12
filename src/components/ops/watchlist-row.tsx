@@ -29,11 +29,11 @@ function stateToSeverity(state: string): 'critical' | 'high' | 'medium' | 'low' 
   }
 }
 
-function toValidState(
-  state: string,
-): 'BUY' | 'HOLD' | 'WATCH' | 'SELL' | 'STOP_HIT' | 'EXPIRED' {
+function toValidState(state: string): 'BUY' | 'HOLD' | 'WATCH' | 'SELL' | 'STOP_HIT' | 'EXPIRED' {
   const valid = ['BUY', 'HOLD', 'WATCH', 'SELL', 'STOP_HIT', 'EXPIRED'];
-  return valid.includes(state) ? (state as 'BUY' | 'HOLD' | 'WATCH' | 'SELL' | 'STOP_HIT' | 'EXPIRED') : 'HOLD';
+  return valid.includes(state)
+    ? (state as 'BUY' | 'HOLD' | 'WATCH' | 'SELL' | 'STOP_HIT' | 'EXPIRED')
+    : 'HOLD';
 }
 
 export function WatchlistRow({
@@ -60,7 +60,7 @@ export function WatchlistRow({
         <span className="font-mono text-sm font-semibold tracking-wide">{ticker}</span>
         <span className="text-muted-foreground truncate text-xs">{name}</span>
         {sector && (
-          <span className="text-muted-foreground/60 font-mono text-[10px] uppercase tracking-wider">
+          <span className="text-muted-foreground/60 font-mono text-[10px] tracking-wider uppercase">
             {sector}
           </span>
         )}
@@ -77,7 +77,7 @@ export function WatchlistRow({
         <StatusPill status={toValidState(state)} />
         <button
           onClick={onRemove}
-          className="text-sell hover:text-sell/80 font-mono text-xs uppercase tracking-wider transition-colors"
+          className="text-sell hover:text-sell/80 font-mono text-xs tracking-wider uppercase transition-colors"
         >
           [REMOVE]
         </button>

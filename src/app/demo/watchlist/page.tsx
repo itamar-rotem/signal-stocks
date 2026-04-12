@@ -24,9 +24,7 @@ export default function DemoWatchlistPage() {
     return allStocks.filter((s) => {
       if (watchedTickers.has(s.stock.ticker)) return false;
       if (!q) return true;
-      return (
-        s.stock.ticker.toLowerCase().includes(q) || s.stock.name.toLowerCase().includes(q)
-      );
+      return s.stock.ticker.toLowerCase().includes(q) || s.stock.name.toLowerCase().includes(q);
     });
   }, [watchedTickers, search]);
 
@@ -71,7 +69,7 @@ export default function DemoWatchlistPage() {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Search ticker..."
-          className="bg-card border-border focus:border-primary w-full max-w-xs rounded-sm border px-3 py-2 font-mono text-sm outline-none transition-colors placeholder:text-muted-foreground/50 focus:ring-0"
+          className="bg-card border-border focus:border-primary placeholder:text-muted-foreground/50 w-full max-w-xs rounded-sm border px-3 py-2 font-mono text-sm transition-colors outline-none focus:ring-0"
         />
       </div>
 

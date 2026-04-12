@@ -27,7 +27,7 @@ src/
     (auth)/         Clerk-protected routes
       dashboard/
         signals/      Phase 9a — signal list page
-        watchlist/    Phase 10 — placeholder
+        watchlist/    Phase 10 — personal watchlist with add/remove
         trades/       Phase 11 — placeholder
       stock/[ticker]/ Phase 9a — signal detail + rationale
     demo/           Phase 9b — public sandbox with synthetic fixture data

@@ -30,21 +30,21 @@ export function AddStockCard({
           <div className="font-mono text-sm font-bold tracking-wide">{ticker}</div>
           <div className="text-muted-foreground truncate text-xs">{name}</div>
           {sector && (
-            <div className="text-muted-foreground/60 font-mono text-[10px] uppercase tracking-wider">
+            <div className="text-muted-foreground/60 font-mono text-[10px] tracking-wider uppercase">
               {sector}
             </div>
           )}
         </div>
-        <div className="text-right flex-shrink-0">
+        <div className="flex-shrink-0 text-right">
           <div className="font-mono text-sm tabular-nums">{fmtUsd(lastPrice)}</div>
-          <div className="text-muted-foreground/80 font-mono text-[10px] uppercase tracking-wider">
+          <div className="text-muted-foreground/80 font-mono text-[10px] tracking-wider uppercase">
             {signalType}
           </div>
         </div>
       </div>
       <button
         onClick={onAdd}
-        className="text-buy hover:text-buy/80 self-start font-mono text-xs uppercase tracking-wider transition-colors"
+        className="text-buy hover:text-buy/80 self-start font-mono text-xs tracking-wider uppercase transition-colors"
       >
         [ADD]
       </button>

@@ -81,29 +81,24 @@ export function WatchlistContent({ initialItems }: WatchlistContentProps) {
       </div>
 
       {/* Add ticker */}
-      <Panel
-        title="ADD TO WATCHLIST"
-        hint="ENTER TICKER"
-      >
+      <Panel title="ADD TO WATCHLIST" hint="ENTER TICKER">
         <form onSubmit={handleAdd} className="flex items-center gap-3 p-4">
           <input
             type="text"
             value={addTicker}
             onChange={(e) => setAddTicker(e.target.value)}
             placeholder="Enter ticker..."
-            className="bg-card border-border focus:border-primary w-full max-w-xs rounded-sm border px-3 py-2 font-mono text-sm uppercase outline-none transition-colors placeholder:text-muted-foreground/50 placeholder:normal-case"
+            className="bg-card border-border focus:border-primary placeholder:text-muted-foreground/50 w-full max-w-xs rounded-sm border px-3 py-2 font-mono text-sm uppercase transition-colors outline-none placeholder:normal-case"
           />
           <button
             type="submit"
             disabled={addMutation.isPending || !addTicker.trim()}
-            className="text-buy hover:text-buy/80 font-mono text-xs uppercase tracking-wider transition-colors disabled:opacity-50"
+            className="text-buy hover:text-buy/80 font-mono text-xs tracking-wider uppercase transition-colors disabled:opacity-50"
           >
             {addMutation.isPending ? '[ADDING...]' : '[ADD]'}
           </button>
           {addMutation.isError && (
-            <span className="text-sell font-mono text-xs">
-              {addMutation.error.message}
-            </span>
+            <span className="text-sell font-mono text-xs">{addMutation.error.message}</span>
           )}
         </form>
       </Panel>
