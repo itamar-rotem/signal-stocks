@@ -14,7 +14,7 @@ type WatchlistItem = {
   name: string;
   sector: string | null;
   lastPrice: number | null;
-  source: string;
+  source: 'manual' | 'signal';
   addedAt: Date;
 };
 

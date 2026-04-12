@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 import { Eye, Gauge } from 'lucide-react';
 import { DEMO_STOCKS } from '@/lib/demo/fixtures';
 import { MetricTile } from '@/components/ops/metric-tile';
@@ -8,34 +8,28 @@ import { Panel } from '@/components/ops/panel';
 import { WatchlistRow } from '@/components/ops/watchlist-row';
 import { AddStockCard } from '@/components/ops/add-stock-card';
 
+const ALL_STOCKS = Object.values(DEMO_STOCKS);
+
 export default function DemoWatchlistPage() {
   const [watchedTickers, setWatchedTickers] = useState<Set<string>>(new Set(['NOVA']));
   const [search, setSearch] = useState('');
 
-  const allStocks = Object.values(DEMO_STOCKS);
+  const watchedItems = ALL_STOCKS.filter((s) => watchedTickers.has(s.stock.ticker));
 
-  const watchedItems = useMemo(
-    () => allStocks.filter((s) => watchedTickers.has(s.stock.ticker)),
-    [watchedTickers],
-  );
+  const q = search.toLowerCase();
+  const availableItems = ALL_STOCKS.filter((s) => {
+    if (watchedTickers.has(s.stock.ticker)) return false;
+    if (!q) return true;
+    return s.stock.ticker.toLowerCase().includes(q) || s.stock.name.toLowerCase().includes(q);
+  });
 
-  const availableItems = useMemo(() => {
-    const q = search.toLowerCase();
-    return allStocks.filter((s) => {
-      if (watchedTickers.has(s.stock.ticker)) return false;
-      if (!q) return true;
-      return s.stock.ticker.toLowerCase().includes(q) || s.stock.name.toLowerCase().includes(q);
-    });
-  }, [watchedTickers, search]);
-
-  const avgConfidence = useMemo(() => {
-    if (watchedItems.length === 0) return 0;
-    const total = watchedItems.reduce((sum, s) => {
-      const score = s.signals[0]?.signalScore ?? 0;
-      return sum + score;
-    }, 0);
-    return Math.round(total / watchedItems.length);
-  }, [watchedItems]);
+  const avgConfidence =
+    watchedItems.length > 0
+      ? Math.round(
+          watchedItems.reduce((sum, s) => sum + (s.signals[0]?.signalScore ?? 0), 0) /
+            watchedItems.length,
+        )
+      : 0;
 
   function addTicker(ticker: string) {
     setWatchedTickers((prev) => new Set([...prev, ticker]));
