@@ -90,6 +90,7 @@ describe('runSimulation', () => {
 
   it('uses default seed 42 when seed is omitted', () => {
     const r1 = runSimulation({ ...BASE_PARAMS, seed: 42 });
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { seed: _omit, ...noSeed } = BASE_PARAMS;
     const r2 = runSimulation(noSeed);
     expect(r1.finalEquity).toBe(r2.finalEquity);
