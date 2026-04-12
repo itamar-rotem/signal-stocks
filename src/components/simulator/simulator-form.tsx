@@ -43,7 +43,7 @@ export function SimulatorForm({ onRun, isRunning = false }: SimulatorFormProps) 
         <div className="flex flex-col gap-1.5">
           <label className={LABEL_CLASS}>Initial Capital</label>
           <div className="relative">
-            <span className="absolute left-3 top-1/2 -translate-y-1/2 font-mono text-sm text-muted-foreground">
+            <span className="text-muted-foreground absolute top-1/2 left-3 -translate-y-1/2 font-mono text-sm">
               $
             </span>
             <input
@@ -71,7 +71,7 @@ export function SimulatorForm({ onRun, isRunning = false }: SimulatorFormProps) 
               step={1}
               onChange={(e) => setPositionSizePct(Number(e.target.value))}
             />
-            <span className="absolute right-3 top-1/2 -translate-y-1/2 font-mono text-sm text-muted-foreground">
+            <span className="text-muted-foreground absolute top-1/2 right-3 -translate-y-1/2 font-mono text-sm">
               %
             </span>
           </div>
@@ -107,7 +107,7 @@ export function SimulatorForm({ onRun, isRunning = false }: SimulatorFormProps) 
               step={1}
               onChange={(e) => setWinRatePct(Number(e.target.value))}
             />
-            <span className="absolute right-3 top-1/2 -translate-y-1/2 font-mono text-sm text-muted-foreground">
+            <span className="text-muted-foreground absolute top-1/2 right-3 -translate-y-1/2 font-mono text-sm">
               %
             </span>
           </div>
@@ -126,7 +126,7 @@ export function SimulatorForm({ onRun, isRunning = false }: SimulatorFormProps) 
               step={0.5}
               onChange={(e) => setAvgWinPct(Number(e.target.value))}
             />
-            <span className="absolute right-3 top-1/2 -translate-y-1/2 font-mono text-sm text-muted-foreground">
+            <span className="text-muted-foreground absolute top-1/2 right-3 -translate-y-1/2 font-mono text-sm">
               %
             </span>
           </div>
@@ -145,7 +145,7 @@ export function SimulatorForm({ onRun, isRunning = false }: SimulatorFormProps) 
               step={0.5}
               onChange={(e) => setAvgLossPct(Number(e.target.value))}
             />
-            <span className="absolute right-3 top-1/2 -translate-y-1/2 font-mono text-sm text-muted-foreground">
+            <span className="text-muted-foreground absolute top-1/2 right-3 -translate-y-1/2 font-mono text-sm">
               %
             </span>
           </div>
@@ -164,7 +164,7 @@ export function SimulatorForm({ onRun, isRunning = false }: SimulatorFormProps) 
               step={1}
               onChange={(e) => setMonths(Number(e.target.value))}
             />
-            <span className="absolute right-3 top-1/2 -translate-y-1/2 font-mono text-xs text-muted-foreground">
+            <span className="text-muted-foreground absolute top-1/2 right-3 -translate-y-1/2 font-mono text-xs">
               months
             </span>
           </div>
@@ -175,7 +175,7 @@ export function SimulatorForm({ onRun, isRunning = false }: SimulatorFormProps) 
         <Button
           type="submit"
           disabled={isRunning}
-          className="font-mono text-xs tracking-widest uppercase bg-emerald-600 hover:bg-emerald-500 text-white border-0"
+          className="border-0 bg-emerald-600 font-mono text-xs tracking-widest text-white uppercase hover:bg-emerald-500"
         >
           {isRunning ? '[ RUNNING... ]' : '[ RUN SIMULATION ]'}
         </Button>

@@ -70,13 +70,13 @@ export function Hero() {
         >
           <Link
             href="/performance"
-            className="font-mono text-xs text-muted-foreground hover:text-cyan-400 transition-colors tracking-wider"
+            className="text-muted-foreground font-mono text-xs tracking-wider transition-colors hover:text-cyan-400"
           >
             View performance &#8599;
           </Link>
           <Link
             href="/simulator"
-            className="font-mono text-xs text-muted-foreground hover:text-cyan-400 transition-colors tracking-wider"
+            className="text-muted-foreground font-mono text-xs tracking-wider transition-colors hover:text-cyan-400"
           >
             Try the simulator &#8599;
           </Link>

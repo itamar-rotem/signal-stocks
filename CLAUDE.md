@@ -33,6 +33,8 @@ src/
     demo/           Phase 9b — public sandbox with synthetic fixture data
       signals/
       stock/[ticker]/
+    performance/  Phase 12 — platform performance dashboard (public)
+    simulator/    Phase 12 — backtest calculator (public)
     sign-in/
     sign-up/
     api/            API routes + tRPC fetch handler

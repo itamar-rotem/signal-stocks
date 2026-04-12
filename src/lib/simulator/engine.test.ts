@@ -36,7 +36,7 @@ describe('runSimulation', () => {
     });
     const actualWinRate = result.wins / result.totalTrades;
     expect(actualWinRate).toBeGreaterThan(0.48); // 58% - 10%
-    expect(actualWinRate).toBeLessThan(0.68);    // 58% + 10%
+    expect(actualWinRate).toBeLessThan(0.68); // 58% + 10%
   });
 
   it('final equity > 0 for reasonable params', () => {

@@ -18,11 +18,11 @@ export default function SimulatorPage() {
   return (
     <section className="mx-auto max-w-5xl space-y-6 px-4 py-8">
       <header>
-        <div className="font-mono text-xs tracking-widest text-muted-foreground">
+        <div className="text-muted-foreground font-mono text-xs tracking-widest">
           LODESTAR &#9656; SIMULATOR
         </div>
         <h1 className="mt-1 text-3xl font-bold">Backtest Simulator</h1>
-        <p className="mt-1 text-sm text-muted-foreground">
+        <p className="text-muted-foreground mt-1 text-sm">
           Model potential outcomes by adjusting signal parameters. All results are simulated.
         </p>
       </header>

@@ -107,12 +107,10 @@ export const PLATFORM_STATS: PlatformSnapshot[] = _result.equityCurve.map(({ mon
 });
 
 const _totalSignals = PLATFORM_STATS.reduce((s, r) => s + r.totalSignals, 0);
-const _overallWinRate =
-  _result.totalTrades > 0 ? _result.wins / _result.totalTrades : 0;
+const _overallWinRate = _result.totalTrades > 0 ? _result.wins / _result.totalTrades : 0;
 const _totalReturn = _result.totalReturnPct;
 const _maxDrawdown = _result.maxDrawdownPct;
-const _avgHoldDays =
-  PLATFORM_STATS.reduce((s, r) => s + r.avgHoldDays, 0) / PLATFORM_STATS.length;
+const _avgHoldDays = PLATFORM_STATS.reduce((s, r) => s + r.avgHoldDays, 0) / PLATFORM_STATS.length;
 
 export const PLATFORM_SUMMARY: PlatformSummary = {
   totalSignals: _totalSignals,

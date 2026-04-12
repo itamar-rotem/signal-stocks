@@ -60,11 +60,7 @@ export function SimulatorResults({ result, initialCapital }: SimulatorResultsPro
         <MetricTile
           label="Profit Factor"
           value={
-            profitFactor === Infinity
-              ? '∞'
-              : profitFactor === 0
-                ? '0.00'
-                : profitFactor.toFixed(2)
+            profitFactor === Infinity ? '∞' : profitFactor === 0 ? '0.00' : profitFactor.toFixed(2)
           }
           hint="gross wins / losses"
           tone={profitFactor >= 1.5 ? 'buy' : profitFactor >= 1 ? 'watch' : 'sell'}
@@ -82,25 +78,27 @@ export function SimulatorResults({ result, initialCapital }: SimulatorResultsPro
       <Panel title="TRADE SUMMARY">
         <div className="grid grid-cols-2 gap-3 p-4 sm:grid-cols-3 lg:grid-cols-5">
           <div className="flex flex-col gap-0.5">
-            <span className="font-mono text-[10px] tracking-widest text-muted-foreground uppercase">
+            <span className="text-muted-foreground font-mono text-[10px] tracking-widest uppercase">
               Total Trades
             </span>
             <span className="font-mono text-lg font-bold tabular-nums">{totalTrades}</span>
           </div>
           <div className="flex flex-col gap-0.5">
-            <span className="font-mono text-[10px] tracking-widest text-muted-foreground uppercase">
+            <span className="text-muted-foreground font-mono text-[10px] tracking-widest uppercase">
               Wins
             </span>
-            <span className="font-mono text-lg font-bold tabular-nums text-emerald-400">{wins}</span>
+            <span className="font-mono text-lg font-bold text-emerald-400 tabular-nums">
+              {wins}
+            </span>
           </div>
           <div className="flex flex-col gap-0.5">
-            <span className="font-mono text-[10px] tracking-widest text-muted-foreground uppercase">
+            <span className="text-muted-foreground font-mono text-[10px] tracking-widest uppercase">
               Losses
             </span>
-            <span className="font-mono text-lg font-bold tabular-nums text-red-400">{losses}</span>
+            <span className="font-mono text-lg font-bold text-red-400 tabular-nums">{losses}</span>
           </div>
           <div className="flex flex-col gap-0.5">
-            <span className="font-mono text-[10px] tracking-widest text-muted-foreground uppercase">
+            <span className="text-muted-foreground font-mono text-[10px] tracking-widest uppercase">
               Win Rate
             </span>
             <span className="font-mono text-lg font-bold tabular-nums">
@@ -108,7 +106,7 @@ export function SimulatorResults({ result, initialCapital }: SimulatorResultsPro
             </span>
           </div>
           <div className="flex flex-col gap-0.5">
-            <span className="font-mono text-[10px] tracking-widest text-muted-foreground uppercase">
+            <span className="text-muted-foreground font-mono text-[10px] tracking-widest uppercase">
               Avg Trade
             </span>
             <span

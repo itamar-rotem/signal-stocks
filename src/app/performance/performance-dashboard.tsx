@@ -22,11 +22,11 @@ export function PerformanceDashboard({ stats, summary }: PerformanceDashboardPro
   return (
     <section className="mx-auto max-w-5xl space-y-6 px-4 py-8">
       <header>
-        <div className="font-mono text-xs tracking-widest text-muted-foreground">
+        <div className="text-muted-foreground font-mono text-xs tracking-widest">
           LODESTAR &#9656; PERFORMANCE
         </div>
         <h1 className="mt-1 text-3xl font-bold">Platform Performance</h1>
-        <p className="mt-1 text-sm text-muted-foreground">
+        <p className="text-muted-foreground mt-1 text-sm">
           Simulated results from Lodestar AI signals over the past 12 months.
         </p>
       </header>
@@ -83,20 +83,20 @@ export function PerformanceDashboard({ stats, summary }: PerformanceDashboardPro
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="border-b border-border">
-                <th className="px-4 py-2.5 text-left font-mono text-[10px] tracking-widest text-muted-foreground uppercase">
+              <tr className="border-border border-b">
+                <th className="text-muted-foreground px-4 py-2.5 text-left font-mono text-[10px] tracking-widest uppercase">
                   Date
                 </th>
-                <th className="px-4 py-2.5 text-right font-mono text-[10px] tracking-widest text-muted-foreground uppercase">
+                <th className="text-muted-foreground px-4 py-2.5 text-right font-mono text-[10px] tracking-widest uppercase">
                   Signals
                 </th>
-                <th className="px-4 py-2.5 text-right font-mono text-[10px] tracking-widest text-muted-foreground uppercase">
+                <th className="text-muted-foreground px-4 py-2.5 text-right font-mono text-[10px] tracking-widest uppercase">
                   Win Rate
                 </th>
-                <th className="px-4 py-2.5 text-right font-mono text-[10px] tracking-widest text-muted-foreground uppercase">
+                <th className="text-muted-foreground px-4 py-2.5 text-right font-mono text-[10px] tracking-widest uppercase">
                   Avg Return
                 </th>
-                <th className="px-4 py-2.5 text-right font-mono text-[10px] tracking-widest text-muted-foreground uppercase">
+                <th className="text-muted-foreground px-4 py-2.5 text-right font-mono text-[10px] tracking-widest uppercase">
                   Equity
                 </th>
               </tr>
@@ -109,7 +109,7 @@ export function PerformanceDashboard({ stats, summary }: PerformanceDashboardPro
                 return (
                   <tr
                     key={row.date}
-                    className="border-b border-border/40 hover:bg-muted/20 transition-colors"
+                    className="border-border/40 hover:bg-muted/20 border-b transition-colors"
                   >
                     <td className="px-4 py-2.5 font-mono text-sm tabular-nums">{row.date}</td>
                     <td className="px-4 py-2.5 text-right font-mono text-sm tabular-nums">
@@ -138,17 +138,15 @@ export function PerformanceDashboard({ stats, summary }: PerformanceDashboardPro
       </Panel>
 
       {/* CTA */}
-      <div className="flex items-center justify-between rounded-sm border border-border bg-card px-4 py-4">
+      <div className="border-border bg-card flex items-center justify-between rounded-sm border px-4 py-4">
         <div>
           <p className="font-mono text-sm font-medium">Want to model your own strategy?</p>
-          <p className="mt-0.5 font-mono text-xs text-muted-foreground">
+          <p className="text-muted-foreground mt-0.5 font-mono text-xs">
             Adjust win rates, position sizes, and more in the interactive simulator.
           </p>
         </div>
         <Link href="/simulator">
-          <Button className="font-mono text-xs tracking-widest uppercase">
-            Try the simulator
-          </Button>
+          <Button className="font-mono text-xs tracking-widest uppercase">Try the simulator</Button>
         </Link>
       </div>
     </section>
