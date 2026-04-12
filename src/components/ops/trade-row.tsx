@@ -20,6 +20,7 @@ export interface TradeRowProps {
 }
 
 export function TradeRow({
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   tradeId: _tradeId,
   ticker,
   name,

@@ -15,7 +15,7 @@ export function fmtPct(n: number): string {
 
 /** Format P&L with sign; returns { text: "+$417.00", isPositive: boolean } */
 export function fmtPnl(n: number): { text: string; isPositive: boolean } {
-  const sign = n >= 0 ? '+' : '';
+  const sign = n >= 0 ? '+' : '-';
   return { text: sign + '$' + Math.abs(n).toFixed(2), isPositive: n >= 0 };
 }
 
