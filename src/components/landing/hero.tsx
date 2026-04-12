@@ -64,6 +64,23 @@ export function Hero() {
             </Button>
           </Link>
         </div>
+        <div
+          className="animate-fade-up mt-4 flex items-center justify-center gap-6"
+          style={{ animationDelay: '1s' }}
+        >
+          <Link
+            href="/performance"
+            className="font-mono text-xs text-muted-foreground hover:text-cyan-400 transition-colors tracking-wider"
+          >
+            View performance &#8599;
+          </Link>
+          <Link
+            href="/simulator"
+            className="font-mono text-xs text-muted-foreground hover:text-cyan-400 transition-colors tracking-wider"
+          >
+            Try the simulator &#8599;
+          </Link>
+        </div>
       </div>
     </section>
   );

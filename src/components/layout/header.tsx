@@ -21,6 +21,24 @@ export function Header() {
         <nav className="flex items-center gap-3">
           {!isSignedIn ? (
             <>
+              <Link href="/performance">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="font-mono text-xs tracking-wider uppercase"
+                >
+                  Performance
+                </Button>
+              </Link>
+              <Link href="/simulator">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="font-mono text-xs tracking-wider uppercase"
+                >
+                  Simulator
+                </Button>
+              </Link>
               <Link href="/sign-in">
                 <Button
                   variant="ghost"
