@@ -28,7 +28,7 @@ src/
       dashboard/
         signals/      Phase 9a — signal list page
         watchlist/    Phase 10 — personal watchlist with add/remove
-        trades/       Phase 11 — placeholder
+        trades/       Phase 11 — trade tracker with log/close/P&L
       stock/[ticker]/ Phase 9a — signal detail + rationale
     demo/           Phase 9b — public sandbox with synthetic fixture data
       signals/
