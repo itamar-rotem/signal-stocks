@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { fmtUsd, fmtPct, fmtRelTime } from './format';
+import { fmtUsd, fmtPct, fmtRelTime, fmtPnl } from './format';
 
 describe('fmtUsd', () => {
   it('formats a round number', () => {
@@ -63,5 +63,31 @@ describe('fmtRelTime', () => {
   it('returns ISO date for >= 7 days', () => {
     expect(fmtRelTime(new Date(NOW - 7 * 86400_000))).toBe('2026-04-04');
     expect(fmtRelTime(new Date('2026-01-01T00:00:00Z'))).toBe('2026-01-01');
+  });
+});
+
+describe('fmtPnl', () => {
+  it('formats a positive P&L with + sign', () => {
+    const result = fmtPnl(417);
+    expect(result.text).toBe('+$417.00');
+    expect(result.isPositive).toBe(true);
+  });
+
+  it('formats a negative P&L with - sign', () => {
+    const result = fmtPnl(-150.5);
+    expect(result.text).toBe('-$150.50');
+    expect(result.isPositive).toBe(false);
+  });
+
+  it('formats zero as positive', () => {
+    const result = fmtPnl(0);
+    expect(result.text).toBe('+$0.00');
+    expect(result.isPositive).toBe(true);
+  });
+
+  it('formats fractional P&L correctly', () => {
+    const result = fmtPnl(13.9 * 30);
+    expect(result.text).toBe('+$417.00');
+    expect(result.isPositive).toBe(true);
   });
 });

@@ -13,6 +13,12 @@ export function fmtPct(n: number): string {
   return sign + n.toFixed(1) + '%';
 }
 
+/** Format P&L with sign; returns { text: "+$417.00", isPositive: boolean } */
+export function fmtPnl(n: number): { text: string; isPositive: boolean } {
+  const sign = n >= 0 ? '+' : '';
+  return { text: sign + '$' + Math.abs(n).toFixed(2), isPositive: n >= 0 };
+}
+
 /**
  * Format a date as a relative time string.
  * < 60s  → "just now"
