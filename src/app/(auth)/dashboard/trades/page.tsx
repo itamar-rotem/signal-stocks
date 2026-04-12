@@ -1,10 +1,10 @@
-import { EmptyState } from '@/components/signals/empty-state';
+import { serverTrpc } from '@/trpc/server';
+import { TradesContent } from './trades-content';
 
-export default function TradesPage() {
-  return (
-    <EmptyState
-      title="Trade log (Phase 11)"
-      description="Log your trades and track P&L — coming in Phase 11."
-    />
-  );
+export const dynamic = 'force-dynamic';
+
+export default async function TradesPage() {
+  const trpc = await serverTrpc();
+  const trades = await trpc.trades.list();
+  return <TradesContent initialTrades={trades} />;
 }
