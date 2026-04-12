@@ -65,8 +65,7 @@ export function TradesContent({ initialTrades }: TradesContentProps) {
     closedTrades.length === 0
       ? null
       : Math.round(
-          (closedTrades.filter((t) => (t.realizedPnl ?? 0) > 0).length / closedTrades.length) *
-            100,
+          (closedTrades.filter((t) => (t.realizedPnl ?? 0) > 0).length / closedTrades.length) * 100,
         );
 
   const pnlDisplay = fmtPnl(totalRealizedPnl);
@@ -92,9 +91,7 @@ export function TradesContent({ initialTrades }: TradesContentProps) {
           LODESTAR &#9656; SIGNAL OPS &#9656; TRADES
         </div>
         <h1 className="mt-1 text-3xl font-bold">Trade Tracker</h1>
-        <p className="text-muted-foreground mt-1 text-sm">
-          Log, manage, and track your positions.
-        </p>
+        <p className="text-muted-foreground mt-1 text-sm">Log, manage, and track your positions.</p>
       </header>
 
       {/* KPI tiles */}

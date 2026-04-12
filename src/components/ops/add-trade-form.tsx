@@ -23,9 +23,7 @@ export function AddTradeForm({
 }: AddTradeFormProps) {
   const [ticker, setTicker] = useState(availableTickers[0]?.ticker ?? '');
   const [entryPrice, setEntryPrice] = useState('');
-  const [entryDate, setEntryDate] = useState(
-    () => new Date().toISOString().slice(0, 10),
-  );
+  const [entryDate, setEntryDate] = useState(() => new Date().toISOString().slice(0, 10));
   const [shares, setShares] = useState('');
   const [notes, setNotes] = useState('');
   const [formError, setFormError] = useState('');
@@ -77,7 +75,7 @@ export function AddTradeForm({
           <select
             value={ticker}
             onChange={(e) => setTicker(e.target.value)}
-            className="bg-input border-border text-foreground w-32 rounded-sm border px-2 py-1.5 font-mono text-sm uppercase outline-none focus:border-buy"
+            className="bg-input border-border text-foreground focus:border-buy w-32 rounded-sm border px-2 py-1.5 font-mono text-sm uppercase outline-none"
           >
             {availableTickers.map((t) => (
               <option key={t.ticker} value={t.ticker}>
@@ -99,7 +97,7 @@ export function AddTradeForm({
             placeholder="0.00"
             step="0.01"
             min="0.01"
-            className="bg-input border-border text-foreground placeholder:text-muted-foreground/50 w-32 rounded-sm border px-2 py-1.5 font-mono text-sm tabular-nums outline-none focus:border-buy"
+            className="bg-input border-border text-foreground placeholder:text-muted-foreground/50 focus:border-buy w-32 rounded-sm border px-2 py-1.5 font-mono text-sm tabular-nums outline-none"
           />
         </div>
 
@@ -112,7 +110,7 @@ export function AddTradeForm({
             type="date"
             value={entryDate}
             onChange={(e) => setEntryDate(e.target.value)}
-            className="bg-input border-border text-foreground w-40 rounded-sm border px-2 py-1.5 font-mono text-sm outline-none focus:border-buy"
+            className="bg-input border-border text-foreground focus:border-buy w-40 rounded-sm border px-2 py-1.5 font-mono text-sm outline-none"
           />
         </div>
 
@@ -128,7 +126,7 @@ export function AddTradeForm({
             placeholder="0"
             step="0.0001"
             min="0.0001"
-            className="bg-input border-border text-foreground placeholder:text-muted-foreground/50 w-28 rounded-sm border px-2 py-1.5 font-mono text-sm tabular-nums outline-none focus:border-buy"
+            className="bg-input border-border text-foreground placeholder:text-muted-foreground/50 focus:border-buy w-28 rounded-sm border px-2 py-1.5 font-mono text-sm tabular-nums outline-none"
           />
         </div>
       </div>
@@ -144,7 +142,7 @@ export function AddTradeForm({
           placeholder="Entry rationale, setup notes..."
           maxLength={500}
           rows={2}
-          className="bg-input border-border text-foreground placeholder:text-muted-foreground/50 w-full max-w-xl resize-none rounded-sm border px-2 py-1.5 font-mono text-xs outline-none focus:border-buy placeholder:normal-case"
+          className="bg-input border-border text-foreground placeholder:text-muted-foreground/50 focus:border-buy w-full max-w-xl resize-none rounded-sm border px-2 py-1.5 font-mono text-xs outline-none placeholder:normal-case"
         />
       </div>
 
@@ -156,9 +154,7 @@ export function AddTradeForm({
         >
           {isPending ? '[LOGGING...]' : '[LOG TRADE]'}
         </button>
-        {displayError && (
-          <span className="text-sell font-mono text-xs">{displayError}</span>
-        )}
+        {displayError && <span className="text-sell font-mono text-xs">{displayError}</span>}
       </div>
     </form>
   );

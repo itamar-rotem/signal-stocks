@@ -71,8 +71,7 @@ export default function DemoTradesPage() {
     closedTrades.length === 0
       ? null
       : Math.round(
-          (closedTrades.filter((t) => (t.realizedPnl ?? 0) > 0).length / closedTrades.length) *
-            100,
+          (closedTrades.filter((t) => (t.realizedPnl ?? 0) > 0).length / closedTrades.length) * 100,
         );
 
   const pnlDisplay = fmtPnl(totalRealizedPnl);
@@ -131,9 +130,7 @@ export default function DemoTradesPage() {
           LODESTAR &#9656; SIGNAL OPS &#9656; DEMO &#9656; TRADES
         </div>
         <h1 className="mt-1 text-3xl font-bold">Trade Tracker</h1>
-        <p className="text-muted-foreground mt-1 text-sm">
-          Log, manage, and track your positions.
-        </p>
+        <p className="text-muted-foreground mt-1 text-sm">Log, manage, and track your positions.</p>
       </header>
 
       {/* KPI tiles */}
@@ -195,11 +192,7 @@ export default function DemoTradesPage() {
         ) : (
           <div className="divide-border divide-y">
             {closedTrades.map((t) => (
-              <TradeRow
-                key={t.tradeId}
-                {...t}
-                onRemove={() => handleRemove(t.tradeId)}
-              />
+              <TradeRow key={t.tradeId} {...t} onRemove={() => handleRemove(t.tradeId)} />
             ))}
           </div>
         )}

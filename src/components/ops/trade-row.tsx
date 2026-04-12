@@ -35,9 +35,7 @@ export function TradeRow({
 }: TradeRowProps) {
   const [closing, setClosing] = useState(false);
   const [closePrice, setClosePrice] = useState('');
-  const [closeDate, setCloseDate] = useState(
-    () => new Date().toISOString().slice(0, 10),
-  );
+  const [closeDate, setCloseDate] = useState(() => new Date().toISOString().slice(0, 10));
   const [closeError, setCloseError] = useState('');
 
   function handleConfirmClose() {
@@ -173,13 +171,13 @@ export function TradeRow({
             placeholder="Exit price"
             step="0.01"
             min="0.01"
-            className="bg-input border-border text-foreground placeholder:text-muted-foreground/50 w-32 rounded-sm border px-2 py-1.5 font-mono text-sm tabular-nums outline-none focus:border-buy"
+            className="bg-input border-border text-foreground placeholder:text-muted-foreground/50 focus:border-buy w-32 rounded-sm border px-2 py-1.5 font-mono text-sm tabular-nums outline-none"
           />
           <input
             type="date"
             value={closeDate}
             onChange={(e) => setCloseDate(e.target.value)}
-            className="bg-input border-border text-foreground w-40 rounded-sm border px-2 py-1.5 font-mono text-sm outline-none focus:border-buy"
+            className="bg-input border-border text-foreground focus:border-buy w-40 rounded-sm border px-2 py-1.5 font-mono text-sm outline-none"
           />
           <button
             onClick={handleConfirmClose}
@@ -187,9 +185,7 @@ export function TradeRow({
           >
             [CLOSE POSITION]
           </button>
-          {closeError && (
-            <span className="text-sell font-mono text-xs">{closeError}</span>
-          )}
+          {closeError && <span className="text-sell font-mono text-xs">{closeError}</span>}
         </div>
       )}
     </div>
