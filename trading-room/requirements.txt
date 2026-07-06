@@ -1,0 +1,12 @@
+pandas>=2.0
+numpy>=1.26
+yfinance>=0.2.40
+streamlit>=1.38
+plotly>=5.20
+python-dotenv>=1.0
+requests>=2.31
+websocket-client>=1.7
+lxml>=5.0
+pytest>=8.0
+# Optional: only needed for the Alpaca paper-trading bridge / IEX live stream
+alpaca-py>=0.21
