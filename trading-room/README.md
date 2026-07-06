@@ -117,6 +117,40 @@ less than half the in-sample one (a classic overfitting signature).
 `--synthetic` runs the same pipeline on a deterministic random walk — useful
 offline or for demos; it is clearly labeled and is **not** real market data.
 
+## Hosting it somewhere
+
+**Vercel cannot host this app** — Streamlit needs a persistent Python server
+with websockets, and Vercel only runs short-lived serverless functions. Use
+one of these instead:
+
+### Streamlit Community Cloud (free, no Dockerfile needed)
+
+1. Go to https://share.streamlit.io → **Create app**
+2. Repo `itamar-rotem/signal-stocks`, main file path `trading-room/dashboard.py`
+3. Optional: paste `FINNHUB_API_KEY` / `TELEGRAM_*` into Advanced settings → Secrets
+
+Caveat: the container is ephemeral, so `trading.db` (journal/positions) resets
+on recycle. Fine for screening and signals; keep the journal local if you care
+about it.
+
+### Railway / Render / Fly.io (Docker, persistent disk possible)
+
+A `Dockerfile` is included, plus `railway.json` and `fly.toml`.
+
+- **Railway**: New project → Deploy from GitHub repo → set *Root Directory*
+  to `trading-room`. It picks up `railway.json`/Dockerfile automatically.
+  Attach a volume mounted at `/data` to persist `trading.db`.
+- **Render**: New → Web Service → connect the repo, *Root Directory*
+  `trading-room`, runtime Docker. Add a Disk mounted at `/data`.
+- **Fly.io**: `cd trading-room && fly volumes create trading_data --size 1 && fly launch`.
+
+Set env vars (`FINNHUB_API_KEY`, `TELEGRAM_*`, `ACCOUNT_SIZE`, …) in the
+platform dashboard — never commit `.env`. The alert daemon runs as a second
+service from the same image with the command `python alerts.py --daemon`.
+
+If you expose the dashboard publicly, remember it has no authentication —
+prefer the platform's access controls or keep the URL private.
+
 ## Notes
 
 - yfinance data is unofficial and delayed; expect occasional gaps or schema
