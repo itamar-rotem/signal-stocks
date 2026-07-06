@@ -1,0 +1,26 @@
+# Fly.io config — run `fly launch` from inside trading-room/.
+# Create the volume first:  fly volumes create trading_data --size 1
+
+app = "trading-room"
+primary_region = "fra"
+
+[build]
+
+[env]
+  TRADING_DB = "/data/trading.db"
+
+[[mounts]]
+  source = "trading_data"
+  destination = "/data"
+
+[http_service]
+  internal_port = 8501
+  force_https = true
+  auto_stop_machines = "stop"
+  auto_start_machines = true
+  min_machines_running = 0
+
+[[vm]]
+  memory = "1gb"
+  cpu_kind = "shared"
+  cpus = 1
